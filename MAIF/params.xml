@@ -1,0 +1,173 @@
+﻿<root>
+  <Group id="1" desc="Таблица 7 - Исходные данные для расчета" excel="B6">
+    <Param name="common_address" desc="Адрес дома" units="" excel="D7:F7" allow_edit="1" tooltip="Адрес, по которому дом будет расположен"/>
+    <Param name="common_calc_date" desc="Дата, на которую производятся расчеты" units="date" excel="D8:F8" value="%current_date%" tooltip="Текущая дата" allow_edit="0"/>
+    <Param name="common_discont_value" desc="Ставка дисконтирования" units="%" excel="D9:F9" allow_edit="1" tooltip="Должна быть равна ставке ЦБ на текущий год минус инфляция">
+      <value>0.5</value>
+      <value>1</value>
+      <value>1.5</value>
+    </Param>
+    <Param name="common_square_full" desc="Площадь дома общая" units="кв.м." excel="D10:F10" allow_edit="1"/>
+    <Param name="common_square_useful" desc="Площадь дома полезная" units="кв.м." allow_edit="1"/>
+    <Param name="common_square_land" desc="Площадь земельного участка" units="кв.м." allow_edit="1"/>
+    <Param name="common_apartments_count" desc="Количество квартир" allow_edit="1"/>
+    <Param name="common_people_count" desc="Количество проживающих" allow_edit="1" units="чел."/>
+    <Param name="common_floors_count" desc="Количество этажей" allow_edit="1"/>
+    <Param name="common_build_year" desc="Год постройки" allow_edit="1"/>
+    <Param name="common_energy_class" desc="Класс энергетической эффективности" allow_add="0">
+      <value>A++</value>
+      <value>A+</value>
+      <value>A</value>
+      <value>B</value>
+      <value>C</value>
+      <value>D</value>
+      <value>E</value>
+      <value>F</value>
+      <value>G</value>
+    </Param>
+    <Param name="common_walls_material" desc="Материал стен" allow_edit="1">
+      <value>многослойная теплоэффективная кладка, сборные бетонные блоки для стен подвала с утеплением до глубины промерзания</value>
+    </Param>
+    <Param name="common_frames_material" desc="Материал перекрытий" allow_edit="1">
+      <value>деревянные конструкции с эффективным минераловатным утеплителем, плиты железобетонные пустотные с минераловатным утеплителем</value>
+    </Param>
+    <Param name="common_base_type" desc="Тип фундамента" allow_edit="1">
+      <value>монолитный железобетонный ленточный</value>
+    </Param>
+    <Param name="common_roof_type" desc="Тип кровли" allow_edit="1">
+      <value>скатная по стропильной конструкции из дерева</value>
+    </Param>
+  </Group>
+  <Group id="2" desc="Таблица 8 - Единовременные затраты на ввод в эксплуатацию, тыс.руб.">
+    <Param name="costs_before" desc="Затраты до ввода в эксплуатацию, в том числе:" allow_edit="1" units="тыс. руб." formula="%costs_before_land%+%costs_before_networks%+%costs_before_loans%+%costs_before_other%"/>
+    <Param name="costs_before_land" desc="Земельный участок" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_before_networks" desc="Подключение к сетям" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_before_loans" desc="Кредиты (проценты по кредитам)" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_before_other" desc="Прочее" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_before_building" desc="Стоимость строительства, в том числе:" allow_edit="1" units="тыс. руб." formula="%costs_before_design%+%costs_before_work%+%costs_before_materials%+%costs_before_equipment%+%costs_before_equipment_installation%+%costs_before_equipment_other%"/>
+    <Param name="costs_before_design" desc="затраты на проектирование МКД" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_before_work" desc="затраты на проведение строительно-монтажных работ" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_before_materials" desc="стоимость материалов" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_before_equipment" desc="стоимость оборудования, в том числе" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_before_equipment_energy-efficient" desc="энергоэффективное оборудование" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_before_equipment_installation" desc="монтаж и наладка оборудования" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_before_equipment_other" desc="прочие задачи" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_before_sum_current" desc="СУММА в текущих ценах и без дисконтирования" allow_edit="1" units="тыс. руб." formula="%costs_before%+%costs_before_building%"/>
+    <Param name="costs_before_ek" desc="Коэффициент энергоэффективности (Ek)" allow_edit="1" value="1"/>
+    <Param name="costs_before_years_building" desc="Количество лет периода (стоительство)" allow_edit="1"/>
+    <Param name="costs_before_discount_r" desc="Фактор дисконтирования (R)" allow_edit="1" formula="1/(1+%common_discont_value%)^%costs_before_years_building%"/>
+    <Param name="costs_before_sum_accurate" desc="Сумма с учетом поправок" allow_edit="1" units="тыс. руб." formula="%costs_before_sum_current%*%costs_before_discount_r%*%costs_before_ek%"/>
+  </Group>
+  <Group id="3" desc="Таблица 9 - Единовременные затраты на утилизацию (снос), тыс.руб.">
+    <Param name="costs_after" desc="Затраты на снос, в том числе:" allow_edit="1" units="тыс. руб." formula="%costs_after_utilization%+%costs_after_reuse%"/>
+    <Param name="costs_after_utilization" desc="стоимость работ по утилизации материалов и конструкций" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_after_reuse" desc="стоимость материалов повторного использования (учитываются со знаком минус)" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_after_sum_current" desc="СУММА в текущих ценах и без дисконтирования" allow_edit="1" units="тыс. руб." formula="%costs_after%"/>
+    <Param name="costs_after_years" desc="Номер года прогнозного периода (снос)" allow_edit="1"/>
+    <Param name="costs_after_inflation_rate" desc="Среднегодовой темп роста цен (инфляция) за период" allow_edit="1" units="%">
+      <value>3</value>
+      <value>4</value>
+      <value>5</value>
+    </Param>
+    <Param name="costs_after_inflation_co" desc="Коэффициент роста цен за период" allow_edit="1" formula="(1+%costs_after_inflation_rate%)^%costs_after_years%"/>
+    <Param name="costs_after_discount_r" desc="Фактор дисконтирования (R)" allow_edit="1" formula="1/(1+%common_discont_value%)^%costs_after_years%"/>
+    <Param name="costs_after_sum_accurate" desc="Сумма с учетом поправок" allow_edit="1" units="тыс. руб." formula="%costs_after%*%costs_before_ek%*costs_after_inflation_co*costs_after_discount_r"/>
+  </Group>
+  <Group id="4" desc="Таблица 10 - Расходы на коммунальные ресурсы в осенне-зимний период" h1="Стоимость коммунальных ресурсов при поставке из внешних сетей в осенне-зимний период (тариф)" h2="Расчетное потребление ресурсов из внешних сетей, в осенне-зимний период" h3="Расходы на оплату коммунальных ресурсов в осенне-зимний период" h3_formula="h1*h2">
+    <Param name="costs_communal_fw_electricity" desc="Электроэнергия" allow_edit="1" units="руб./кВт.ч"/>
+    <Param name="costs_communal_fw_gas" desc="Газ" allow_edit="1" units="руб./м куб."/>
+    <Param name="costs_communal_fw_solid" desc="Твердое топливо" allow_edit="1" units="руб./тн"/>
+    <Param name="costs_communal_fw_heating" desc="Отопление" allow_edit="1" units="руб./Гкал"/>
+    <Param name="costs_communal_fw_gvs" desc="ГВС" allow_edit="1" units="руб./м куб."/>
+    <Param name="costs_communal_fw_hvs" desc="ХВС" allow_edit="1" units="руб./м куб."/>
+    <Param name="costs_communal_fw_sewerage" desc="Канализация (водоотведение)" allow_edit="1" units="руб./м куб."/>
+    <Param name="costs_communal_fw_sum_current" desc="СУММА" allow_edit="1" units="руб."/>
+    <Param name="costs_communal_fw_sum" desc="Сумма за осенне-зимний период" allow_edit="1" units="тыс. руб." formula="%costs_communal_fw_sum_current%/1000"/>
+  </Group>
+  <Group id="5" desc="Таблица 11 - Расходы на коммунальные ресурсы в весенне-летний период" h1="Стоимость коммунальных ресурсов при поставке из внешних сетей в весенне-летний период (тариф)" h2="Расчетное потребление ресурсов из внешних сетей, в весенне-летний период" h3="Расходы на оплату коммунальных ресурсов в весенне-летний период" h3_formula="h1*h2">
+    <Param name="costs_communal_ss_electricity" desc="Электроэнергия" allow_edit="1" units="руб./кВт.ч"/>
+    <Param name="costs_communal_ss_gas" desc="Газ" allow_edit="1" units="руб./м куб."/>
+    <Param name="costs_communal_ss_solid" desc="Твердое топливо" allow_edit="1" units="руб./тн"/>
+    <Param name="costs_communal_ss_heating" desc="Отопление" allow_edit="1" units="руб./Гкал"/>
+    <Param name="costs_communal_ss_gvs" desc="ГВС" allow_edit="1" units="руб./м куб."/>
+    <Param name="costs_communal_ss_hvs" desc="ХВС" allow_edit="1" units="руб./м куб."/>
+    <Param name="costs_communal_ss_sewerage" desc="Канализация (водоотведение)" allow_edit="1" units="руб./м куб."/>
+    <Param name="costs_communal_ss_sum_current" desc="СУММА" allow_edit="1" units="руб."/>
+    <Param name="costs_communal_ss_sum" desc="Сумма за весенне-летний период" allow_edit="1" units="тыс. руб." formula="%costs_communal_ss_sum_current%/1000"/>/>
+  </Group>
+  <Group id="6" desc="Таблица 12 - Расходы на коммунальные ресурсы, тыс. руб." h1="Расходы на оплату коммунальных ресурсов в месяц" h2="Количество месяцев в периоде" h3="Сумма" h3_formula="h1*h2">
+    <Param name="costs_communal_sum_fw" desc="Осенне-зимний период" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_communal_sum_ss" desc="Весенне-летний период" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_communal_sum_1" desc="СУММА за 12 месяцев" allow_edit="0" units="тыс. руб." formula="%costs_communal_sum_fw[0]%*%costs_communal_sum_fw[1]%+%costs_communal_sum_ss[0]%+%costs_communal_sum_ss[1]%"/>
+    <Param name="costs_communal_sum_30" desc="СУММА за 30 лет (в текущих ценах и без дисконтирования)" allow_edit="1" units="тыс. руб." formula="%costs_communal_sum_1*30%"/>
+    <Param name="costs_communal_sum_inflation_rate" desc="Среднегодовой темп роста цен (инфляция) за период" allow_edit="1" units="%">
+      <value>3</value>
+      <value>4</value>
+      <value>5</value>
+    </Param>
+    <Param name="costs_communal_sum_inflation_co" desc="Коэффициент роста цен за период" allow_edit="1"/>
+    <Param name="costs_communal_sum_discount_r" desc="Фактор дисконтирования (R)" allow_edit="1"/>
+    <Param name="costs_communal_sum_accurate" desc="Расходы на коммунальные ресурсы за 30 лет" allow_edit="1" units="тыс. руб."/>
+  </Group>
+  <Group id="7" desc="Таблица 13 - Расходы на капитальный ремонт общего имущества в МКД (30 лет), тыс. руб." h1="Стоимость капитального ремонта общего имущества, тыс. рублей" h2="Периодичность капитального ремонта общего имущества, лет" h3="Расходы на капитальный ремонт общего имущества (30 лет), тыс. руб." h3_formula="(30/h2)*h1">
+    <Param name="costs_repair_foundation" desc="фундамент" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_repair_walls" desc="стены и элементы фасада" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_repair_roof" desc="крыша" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_repair_common" desc="помещения общего пользования и подвал" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_repair_garbage" desc="мусоропроводы" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_repair_lifts" desc="лифты" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_repair_ventilation" desc="система вентиляции и дымоудаления" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_repair_electricity" desc="система электроснабжения" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_repair_gas" desc="система газоснабжения" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_repair_heating" desc="система отопления" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_repair_water" desc="система водоснабжения" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_repair_drainage" desc="система водоотведения" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_repair_sum" desc="СУММА за 30 лет (в текущих ценах и без дисконтирования)" allow_edit="1" units="тыс. руб." formula=""/>
+    <Param name="costs_repair_sum_inflation_rate" desc="Среднегодовой темп роста цен (инфляция) за период" allow_edit="1" units="%">
+      <value>3</value>
+      <value>4</value>
+      <value>5</value>
+    </Param>
+    <Param name="costs_repair_sum_inflation_co" desc="Коэффициент роста цен за период" allow_edit="1"/>
+    <Param name="costs_repair_sum_discount_r" desc="Фактор дисконтирования (R)" allow_edit="1"/>
+    <Param name="costs_repair_sum_accurate" desc="Сумма с учетом поправок" allow_edit="1" units="тыс. руб."/>
+  </Group>
+  <Group id="8" desc="Таблица 14 - Расходы на текущий (плановый) ремонт общего имущества за 30 лет, тыс. руб." h1="Стоимость периодического ремонта общего имущества в МКД, тыс. рублей" h2="Периодичность ремонта общего имущества в МКД, лет" h3="Расходы на текущий ремонт общего имущества в МКД (30 лет), тыс. руб." h3_formula="(30/h2)*h1">
+    <Param name="costs_repair_plan_foundation" desc="фундамент" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_repair_plan_walls" desc="стены и элементы фасада" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_repair_plan_roof" desc="крыша" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_repair_plan_common" desc="помещения общего пользования и подвал" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_repair_plan_garbage" desc="мусоропроводы" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_repair_plan_lifts" desc="лифты" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_repair_plan_ventilation" desc="система вентиляции и дымоудаления" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_repair_plan_electricity" desc="система электроснабжения" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_repair_plan_gas" desc="система газоснабжения" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_repair_plan_heating" desc="система отопления" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_repair_plan_water" desc="система водоснабжения" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_repair_plan_drainage" desc="система водоотведения" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_repair_plan_sum" desc="СУММА за 30 лет (в текущих ценах и без дисконтирования)" allow_edit="1" units="тыс. руб." formula=""/>
+    <Param name="costs_repair_plan_sum_inflation_rate" desc="Среднегодовой темп роста цен (инфляция) за период" allow_edit="1" units="%">
+      <value>3</value>
+      <value>4</value>
+      <value>5</value>
+    </Param>
+    <Param name="costs_repair_plan_sum_inflation_co" desc="Коэффициент роста цен за период" allow_edit="1"/>
+    <Param name="costs_repair_plan_sum_discount_r" desc="Фактор дисконтирования (R)" allow_edit="1"/>
+    <Param name="costs_repair_plan_sum_accurate" desc="Сумма с учетом поправок" allow_edit="1" units="тыс. руб."/>
+  </Group>
+  <Group id="9" desc="Таблица 15 - Расходы на содержание общего имущества в МКД, тыс. руб.">
+    <Param name="costs_maintenance_all" desc="Расходы на содержание общего имущества в МКД, тыс. руб. в год, в том числе:" allow_edit="1" units="тыс. руб." formula="%costs_maintenance_constructions%+%costs_maintenance_equipment%+%costs_maintenance_other%"/>
+    <Param name="costs_maintenance_constructions" desc="Содержание конструкций" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_maintenance_equipment" desc="Содержание оборудования и систем инженерно-технического обеспечения" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_maintenance_other" desc="Содержание иного общего имущества в МКД" allow_edit="1" units="тыс. руб."/>
+    <Param name="costs_maintenance_sum_30" desc="СУММА за 30 лет (в текущих ценах и без дисконтирования)" allow_edit="0" units="тыс. руб." formula="%costs_maintenance_all%*30"/>
+    <Param name="costs_maintenance_sum_inflation_rate" desc="Среднегодовой темп роста цен (инфляция) за период" allow_edit="1" units="%">
+      <value>3</value>
+      <value>4</value>
+      <value>5</value>
+    </Param>
+    <Param name="costs_maintenance_inflation_co" desc="Коэффициент роста цен за период" allow_edit="1"/>
+    <Param name="costs_maintenance_discount_r" desc="Фактор дисконтирования (R)" allow_edit="1"/>
+    <Param name="costs_maintenance_accurate" desc="Сумма расходов на содержание общего имущества с учетом поправок (за 30 лет)" allow_edit="1" units="тыс. руб."/>
+  </Group>
+</root>
