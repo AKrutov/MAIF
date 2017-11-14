@@ -107,7 +107,8 @@ namespace MAIF
 
         private void calculateBtn_Click(object sender, EventArgs e)
         {
-
+            Group paramGroup = ((MAIF.ControllsClasses.ControlGroup)this.mainControlPanel.Controls[0]).CurrentGroup;
+            paramGroup = paramGroup;
         }
     }  
 }

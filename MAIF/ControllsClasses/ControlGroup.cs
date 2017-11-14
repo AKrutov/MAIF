@@ -11,10 +11,27 @@ namespace MAIF.ControllsClasses
 {
     class ControlGroup : GroupBox
     {
-        public Group CurrentGroup { get; set; }
-        public int MaxWidth { get; set; } 
-        public int Index;
+        protected Group currentGroup;
+        public Group CurrentGroup { 
+            get
+            {
+                currentGroup.Params.Clear();
+                foreach (Control item in this.Controls)
+                {
+                    if (item.GetType() == typeof(MAIF.classes.ControllsClasses.TextBox) || item.GetType() == typeof(DropDown))
+                    {
+                        currentGroup.Params.Add(((IAbstractControll)item).CurrentParam);
+                    }
+                }
+                return currentGroup;
+            } 
+            set 
+            {
+                this.currentGroup = value;
+            } 
+        }
 
+        public int MaxWidth { get; set; } 
         private int multiplier = 6;
 
         public GroupBox asControl() 
@@ -24,66 +41,63 @@ namespace MAIF.ControllsClasses
 
         public ControlGroup(Group currentGroup)
         {
-            this.CurrentGroup = currentGroup;
+            this.currentGroup = currentGroup;
+            
 
             int maxLabelLenght = 200;
             int maxInputLength = 200;
             int currentYPosition = 20;
-            
-            for (int i = 0; i < this.CurrentGroup.Params.Count; i++)
+
+            for (int i = 0; i < currentGroup.Params.Count; i++)
             {
-                maxLabelLenght = (this.CurrentGroup.Params[i].Desc.Length * multiplier > maxLabelLenght) ? this.CurrentGroup.Params[i].Desc.Length * multiplier : maxLabelLenght;
-                for (int n = 0; n < this.CurrentGroup.Params[i].Values.Count; n++)
+                maxLabelLenght = (currentGroup.Params[i].Desc.Length * multiplier > maxLabelLenght) ? currentGroup.Params[i].Desc.Length * multiplier : maxLabelLenght;
+                for (int n = 0; n < currentGroup.Params[i].Values.Count; n++)
                 {
-                    maxInputLength = (this.CurrentGroup.Params[i].Values[n].Length * multiplier > maxInputLength) ? this.CurrentGroup.Params[i].Values[n].Length * multiplier : maxInputLength;
+                    maxInputLength = (currentGroup.Params[i].Values[n].Length * multiplier > maxInputLength) ? currentGroup.Params[i].Values[n].Length * multiplier : maxInputLength;
                 }
             }
             
             int _cWidth = 5 + maxInputLength + 5 + maxLabelLenght + 40;
-            this.MaxWidth = (_cWidth > this.MaxWidth) ? _cWidth : this.MaxWidth;            
+            this.MaxWidth = (_cWidth > this.MaxWidth) ? _cWidth : this.MaxWidth;
 
-            this.Text = this.CurrentGroup.Desc;
+            this.Text = currentGroup.Desc;
             this.Font = new Font(DefaultFont.FontFamily, DefaultFont.Size, FontStyle.Bold);
             this.Top = 20;
             this.Left = 5;
             this.Width = this.MaxWidth;
 
-            for (int i = 0; i < this.CurrentGroup.Params.Count; i++)
+            for (int i = 0; i < currentGroup.Params.Count; i++)
             {
                 Label caption = new Label();
                 caption.Left = 5;
                 caption.Top = currentYPosition;
                 caption.Width = maxLabelLenght;
-                caption.Text = this.CurrentGroup.Params[i].Desc;
+                caption.Text = currentGroup.Params[i].Desc;
                 this.Controls.Add(caption);
 
-                IAbstractControll _ctrl = new ControllFactory().CreateControl(this.CurrentGroup.Params[i]);
-                if (_ctrl.GetType() == typeof(DropDown) && (this.CurrentGroup.Params[i].Allow_add == null || this.CurrentGroup.Params[i].Allow_add != "0"))
+                IAbstractControll _ctrl = new ControllFactory().CreateControl(currentGroup.Params[i]);
+                if (_ctrl.GetType() == typeof(DropDown) && (currentGroup.Params[i].Allow_add == null || currentGroup.Params[i].Allow_add != "0"))
                 {
                     ((DropDown)_ctrl).AddItem(new DropDownItem("-- Новое значение --", null));
                     ((DropDown)_ctrl).SelectedIndexChanged += ControlGroup_SelectedIndexChanged;     
-                    /*  
-                    Button addValueBtn = new Button();
-                    addValueBtn.Text = "+";
-                    addValueBtn.Font = new Font(DefaultFont.FontFamily, DefaultFont.Size, FontStyle.Bold);
-                    addValueBtn.Width = 20;
-                    addValueBtn.Height = 20;
-                    addValueBtn.Location = new Point(maxLabelLenght + 5 + maxInputLength + 5, currentYPosition);
-
-                    this.Controls.Add(addValueBtn);
-                    */ 
                 }
+
+                if (_ctrl.GetType() == typeof(MAIF.classes.ControllsClasses.TextBox))
+                {
+                    ((MAIF.classes.ControllsClasses.TextBox)_ctrl).TextChanged += ControlGroup_TextChanged;
+                }
+
                 Control ctrl = _ctrl.AsControl(maxInputLength);
                 ctrl.Location = new Point(maxLabelLenght + 5, currentYPosition);
                 this.Controls.Add(ctrl);
 
-                if(this.CurrentGroup.Params[i].Units != null)
+                if (currentGroup.Params[i].Units != null)
                 {
                     Label units = new Label();
                     units.Top = currentYPosition;
                     units.Left = maxLabelLenght + 5 + maxInputLength + 5;
                     units.Width = 30;
-                    units.Text = this.CurrentGroup.Params[i].Units;
+                    units.Text = currentGroup.Params[i].Units;
                     this.Controls.Add(units);
                 }
 
@@ -98,20 +112,30 @@ namespace MAIF.ControllsClasses
             this.Height = currentYPosition + 10;
         }
 
+        void ControlGroup_TextChanged(object sender, EventArgs e)
+        {
+            ((MAIF.classes.ControllsClasses.TextBox)sender).CurrentParam.Value = ((MAIF.classes.ControllsClasses.TextBox)sender).Text;
+        }
+
         void ControlGroup_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (((DropDown)sender).SelectedItem == "-- Новое значение --")
+            DropDown currentControl = (DropDown)sender;
+
+            if ((string)currentControl.SelectedItem == "-- Новое значение --")
             {
                 var form = new TextInputForm();
                 form.Text = "Добавление нового элемента в справочник";
                 var result = form.ShowDialog();
                 if (result == DialogResult.OK)
                 {
-                    ((DropDown)sender).Items.RemoveAt(((DropDown)sender).Items.Count - 1);
-                    ((DropDown)sender).AddItem(new DropDownItem(form.NewValue, null));
-                    ((DropDown)sender).AddItem(new DropDownItem("-- Новое значение --", null));
+                    
+                    currentControl.Items.RemoveAt(currentControl.Items.Count - 1);
+                    currentControl.AddItem(new DropDownItem(form.NewValue, null));
+                    currentControl.AddItem(new DropDownItem("-- Новое значение --", null));
+                    currentControl.SelectedItem = currentControl.Items[currentControl.FindStringExact(form.NewValue)];
 
-                    ((DropDown)sender).SelectedItem = ((DropDown)sender).Items[((DropDown)sender).FindStringExact(form.NewValue)];
+                    currentControl.CurrentParam.Values.Add(form.NewValue);
+                    currentControl.CurrentParam.Value = form.NewValue;
                 }
             }
         }
