@@ -47,7 +47,7 @@ namespace MAIF
             mainControlPanel.Width = mainControlPanel.Parent.Width;
             mainControlPanel.Height = mainControlPanel.Parent.Height - 100;
 
-            using (StreamReader reader = new StreamReader("params2.xml"))
+            using (StreamReader reader = new StreamReader("params.xml"))
             {
                 this.controllGroups = (List<Group>)(new XmlSerializer(typeof(List<Group>), xRoot)).Deserialize(reader);
             }
