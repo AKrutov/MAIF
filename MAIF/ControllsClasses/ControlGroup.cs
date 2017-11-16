@@ -30,7 +30,6 @@ namespace MAIF.ControllsClasses
                 this.currentGroup = value;
             } 
         }
-
         public int MaxWidth { get; set; } 
         private int multiplier = 6;
 
@@ -57,7 +56,7 @@ namespace MAIF.ControllsClasses
                 }
             }
             
-            int _cWidth = 5 + maxInputLength + 5 + maxLabelLenght + 40;
+            int _cWidth = 5 + maxInputLength + 5 + maxLabelLenght + 70;
             this.MaxWidth = (_cWidth > this.MaxWidth) ? _cWidth : this.MaxWidth;
 
             this.Text = currentGroup.Desc;
@@ -68,6 +67,8 @@ namespace MAIF.ControllsClasses
 
             for (int i = 0; i < currentGroup.Params.Count; i++)
             {
+                if (currentGroup.Params[i].IsHidden == "1") continue; 
+
                 Label caption = new Label();
                 caption.Left = 5;
                 caption.Top = currentYPosition;
@@ -96,7 +97,7 @@ namespace MAIF.ControllsClasses
                     Label units = new Label();
                     units.Top = currentYPosition;
                     units.Left = maxLabelLenght + 5 + maxInputLength + 5;
-                    units.Width = 30;
+                    units.Width = 60;
                     units.Text = currentGroup.Params[i].Units;
                     this.Controls.Add(units);
                 }
@@ -138,6 +139,29 @@ namespace MAIF.ControllsClasses
                     currentControl.CurrentParam.Value = form.NewValue;
                 }
             }
+        }
+
+        public bool IsValid()
+        {
+            bool isValid = true;
+            for(int i = 0; i<this.Controls.Count; i++)
+            {
+                if (this.Controls[i].GetType() == typeof(MAIF.classes.ControllsClasses.TextBox) || this.Controls[i].GetType() == typeof(MAIF.classes.ControllsClasses.DropDown))
+                {
+                    if (((IAbstractControll)this.Controls[i]).Validate())
+                    {
+                        isValid = isValid && true;
+                        ((Label)this.Controls[i - 1]).ForeColor = Color.Black;
+                    }
+                    else
+                    {
+                        isValid = isValid && false;
+                        ((Label)this.Controls[i - 1]).ForeColor = Color.Red;
+                    }
+                }
+            }
+
+            return isValid;
         }
     }
 }

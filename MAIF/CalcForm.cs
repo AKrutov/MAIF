@@ -71,7 +71,7 @@ namespace MAIF
 
         private void nextBtn_Click(object sender, EventArgs e)
         {
-            if (this.currentPanel < this.paramGroups.Count-1)
+            if (this.currentPanel < this.paramGroups.Count - 1 && ((ControlGroup)this.paramGroups[this.currentPanel]).IsValid() )
             {
                 this.currentPanel = this.currentPanel + 1;
 
