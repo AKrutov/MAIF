@@ -147,80 +147,80 @@ namespace MAIF
             }
         }
 
-        public static int PdfSharpConvert(String filename)
-        {
-            if (File.Exists(filename))
-            {
-                StreamReader sr = new StreamReader(filename);
-                string html = sr.ReadToEnd();
-                sr.Close();
+        //public static int PdfSharpConvert(String filename)
+        //{
+        //    if (File.Exists(filename))
+        //    {
+        //        StreamReader sr = new StreamReader(filename);
+        //        string html = sr.ReadToEnd();
+        //        sr.Close();
 
-                Byte[] res = null;
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    var pdf = TheArtOfDev.HtmlRenderer.PdfSharp.PdfGenerator.GeneratePdf(html, PdfSharp.PageSize.A4);
-                    pdf.Save(ms);
-                    res = ms.ToArray();
+        //        Byte[] res = null;
+        //        using (MemoryStream ms = new MemoryStream())
+        //        {
+        //            var pdf = TheArtOfDev.HtmlRenderer.PdfSharp.PdfGenerator.GeneratePdf(html, PdfSharp.PageSize.A4);
+        //            pdf.Save(ms);
+        //            res = ms.ToArray();
 
-                    File.WriteAllBytes(filename.Replace(".htm", ".pdf"), res);
-                    return 0;
-                }
-            }
-            return -1;
-        }
+        //            File.WriteAllBytes(filename.Replace(".htm", ".pdf"), res);
+        //            return 0;
+        //        }
+        //    }
+        //    return -1;
+        //}
 
-        public static int PdfSharpConvert2(String filename)
-        {
-            if (File.Exists(filename))
-            {
-                StreamReader sr = new StreamReader(filename);
-                string htmlAll = sr.ReadToEnd();
-                sr.Close();
+        //public static int PdfSharpConvert2(String filename)
+        //{
+        //    if (File.Exists(filename))
+        //    {
+        //        StreamReader sr = new StreamReader(filename);
+        //        string htmlAll = sr.ReadToEnd();
+        //        sr.Close();
 
-                Byte[] res = null;
-                // convert html to pdf  
-                try
-                {
-                    // create a stream that we can write to, in this case a MemoryStream  
-                    using (var stream = new MemoryStream())
-                    {
-                        // create an iTextSharp Document which is an abstraction of a PDF but **NOT** a PDF  
-                        using (var document = new iTextSharp.text.Document())
-                        {
-                            // create a writer that's bound to our PDF abstraction and our stream  
-                            using (var writer = iTextSharp.text.pdf.PdfWriter.GetInstance(document, stream))
-                            {
-                                // open the document for writing  
-                                document.Open();
+        //        Byte[] res = null;
+        //        // convert html to pdf  
+        //        try
+        //        {
+        //            // create a stream that we can write to, in this case a MemoryStream  
+        //            using (var stream = new MemoryStream())
+        //            {
+        //                // create an iTextSharp Document which is an abstraction of a PDF but **NOT** a PDF  
+        //                using (var document = new iTextSharp.text.Document())
+        //                {
+        //                    // create a writer that's bound to our PDF abstraction and our stream  
+        //                    using (var writer = iTextSharp.text.pdf.PdfWriter.GetInstance(document, stream))
+        //                    {
+        //                        // open the document for writing  
+        //                        document.Open();
 
-                                // read html data to StringReader  
-                                using (var html = new StringReader(htmlAll))
-                                {
-                                    iTextSharp.tool.xml.XMLWorkerHelper.GetInstance().ParseXHtml(writer, document, html);
-                                }
+        //                        // read html data to StringReader  
+        //                        using (var html = new StringReader(htmlAll))
+        //                        {
+        //                            iTextSharp.tool.xml.XMLWorkerHelper.GetInstance().ParseXHtml(writer, document, html);
+        //                        }
 
-                                // close document  
-                                document.Close();
-                            }
-                        }
+        //                        // close document  
+        //                        document.Close();
+        //                    }
+        //                }
 
 
-                        res = stream.ToArray();
+        //                res = stream.ToArray();
 
-                        File.WriteAllBytes(filename.Replace(".htm", ".pdf"), res);
-                        return 0;
+        //                File.WriteAllBytes(filename.Replace(".htm", ".pdf"), res);
+        //                return 0;
 
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return -1;
-                }
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            return -1;
+        //        }
 
-            }
-            return -1;
+        //    }
+        //    return -1;
 
-        }
+        //}
 
         public static void ConvertHtmlToPdf(string filename, string css)
         {
@@ -266,6 +266,45 @@ namespace MAIF
                 }
             }
         }
+
+        public static void ConvertHtml2Docx(string inputFile, string outputPath)
+        {
+            try
+            {
+                if (outputPath.Equals("") || !File.Exists(inputFile))
+                {
+                    throw new Exception("Either file does not exist or invalid output path");
+                }
+
+                // app to open the document belower
+                Microsoft.Office.Interop.Word.Application wordApp = new Microsoft.Office.Interop.Word.Application();
+                Microsoft.Office.Interop.Word.Document wordDocument = new Microsoft.Office.Interop.Word.Document();
+                //wordApp.Visible = false;
+
+                // input variables
+                object objInputFile = inputFile;
+                object missParam = Type.Missing;
+
+                wordDocument = wordApp.Documents.Open(ref objInputFile, ref missParam, ref missParam, ref missParam,
+                    ref missParam, ref missParam, ref missParam, ref missParam, ref missParam, ref missParam,
+                    ref missParam, ref missParam, ref missParam, ref missParam, ref missParam, ref missParam);
+
+                if (wordDocument != null)
+                {
+                    // make the convertion
+                    wordDocument.SaveAs2(outputPath, WdSaveFormat.wdFormatXMLDocument, false);
+                }
+
+                // close document and quit application
+                wordDocument.Close();
+                wordApp.Quit();                
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
         public static void ConvertWord2PDF(string inputFile, string outputPath)
         {
             try

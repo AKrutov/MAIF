@@ -98,10 +98,14 @@ namespace MAIF
             LogHelper h = new LogHelper(true);
             h.Info("Запущен расчет пользователем " + System.Security.Principal.WindowsIdentity.GetCurrent().Name);
 
-            Group paramGroup = ((MAIF.ControllsClasses.ControlGroup)this.mainControlPanel.Controls[0]).CurrentGroup;
-            paramGroup = paramGroup;
+            List<Param> allParams = new List<Param>();
 
-            var resultForm = new ResultForm(paramGroup.Params);
+            foreach(MAIF.ControllsClasses.ControlGroup group in this.paramGroups)
+            {
+                allParams.AddRange(group.CurrentGroup.Params);
+            }
+                 
+            var resultForm = new ResultForm(allParams);
             resultForm.Show();
             h.Info("Выполнен расчет пользователем " + Environment.UserName);
         }

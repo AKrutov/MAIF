@@ -25,6 +25,7 @@ namespace MAIF
                 dict.Add(param.Name, param.Value);
             }
             dict.Add("current_date", DateTime.Now.Date.ToShortDateString());
+            dict.Add("default_picture", @"http://www.ipsnews.net/Library/2017/04/DSC_3517-427x472.jpeg");
             return dict;
         }
     }
