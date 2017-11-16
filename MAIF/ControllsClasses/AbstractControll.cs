@@ -12,5 +12,6 @@ namespace MAIF.classes
         void Fill(Param param);
         Control AsControl();
         Control AsControl(int Width);
+        bool Validate();
     }
 }
