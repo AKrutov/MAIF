@@ -52,9 +52,9 @@ namespace MAIF
             
             mainControlPanel.Controls.Add(this.paramGroups[this.currentPanel]);
 
-            foreach (GroupBox item in this.paramGroups)
+            foreach (ControlGroup item in this.paramGroups)
             {
-                item.Width = this.maxWidth;    
+                item.SetWidth(this.maxWidth);    
             }
 
             mainControlPanel.Width = this.maxWidth; // Панель

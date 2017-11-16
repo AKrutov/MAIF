@@ -30,7 +30,27 @@ namespace MAIF.ControllsClasses
                 this.currentGroup = value;
             } 
         }
-        public int MaxWidth { get; set; } 
+        public int MaxWidth { get; set; }
+        public void SetWidth(int value)
+        {
+            int ctrlWidthDiff = value - MaxWidth;
+            this.Width = value;
+            if(ctrlWidthDiff>0)
+            {
+                for (int i = 0; i < this.Controls.Count; i++ )
+                {
+                    if (this.Controls[i].GetType() == typeof(MAIF.classes.ControllsClasses.DropDown) || this.Controls[i].GetType() == typeof(MAIF.classes.ControllsClasses.TextBox))
+                    {
+                        this.Controls[i].Width = this.Controls[i].Width + ctrlWidthDiff;
+                    }
+
+                    if(this.Controls[i].Name == "units")
+                    {
+                        this.Controls[i].Left = this.Controls[i].Left + ctrlWidthDiff;
+                    }
+                }
+            }
+        }
         private int multiplier = 6;
 
         public GroupBox asControl() 
@@ -42,7 +62,7 @@ namespace MAIF.ControllsClasses
         {
             this.currentGroup = currentGroup;
 
-            int maxTotalLength = 1000;
+            int maxTotalLength = 1200;
             int maxLabelLenght = 200;
             int maxInputLength = 200;
             int currentYPosition = 20;
@@ -56,11 +76,11 @@ namespace MAIF.ControllsClasses
                 }
             }
             
-            int _cWidth = 5 + maxInputLength + 5 + maxLabelLenght + 80;
+            int _cWidth = 5 + maxInputLength + 5 + maxLabelLenght + 60;
             this.MaxWidth = (_cWidth > this.MaxWidth) ? _cWidth : this.MaxWidth;
 
             if (this.MaxWidth > maxTotalLength)
-                this.MaxWidth = 1000;
+                this.MaxWidth = maxTotalLength;
 
             this.Text = currentGroup.Desc;
             this.Font = new Font(DefaultFont.FontFamily, DefaultFont.Size, FontStyle.Bold);
@@ -71,6 +91,7 @@ namespace MAIF.ControllsClasses
             for (int i = 0; i < currentGroup.Params.Count; i++)
             {
                 Label caption = new Label();
+                caption.Name = "caption";
                 caption.Left = 5;
                 caption.Top = currentYPosition;
                 caption.Width = maxLabelLenght;
@@ -95,11 +116,7 @@ namespace MAIF.ControllsClasses
 
 
                 foreach (Control ct in this.Controls)
-                {
                     ct.Font = new Font(DefaultFont.FontFamily, DefaultFont.Size, FontStyle.Regular);
-                }
-
-
                 
                 if (currentGroup.Params[i].IsHidden == "1")
                 {
@@ -111,9 +128,10 @@ namespace MAIF.ControllsClasses
                     if (currentGroup.Params[i].Units != null)
                     {
                         Label units = new Label();
+                        units.Name = "units";
                         units.Top = currentYPosition;
                         units.Left = maxLabelLenght + 5 + maxInputLength + 5;
-                        units.Width = 60;
+                        units.Width = 55;
                         units.Text = currentGroup.Params[i].Units;
                         this.Controls.Add(units);
                     }
