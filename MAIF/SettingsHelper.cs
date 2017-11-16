@@ -16,8 +16,9 @@ namespace MAIF
             foreach (var v in values)
             {
                 String newValue = v.Value;
-                if (v.Value.IndexOf("%") >= 0)
-                    newValue = "f(" + v.Value + ")";
+                if(v.Value!=null)
+                    if (v.Value.IndexOf("%") >= 0&&v.Value.IndexOf("current_date")<0)
+                        newValue = "f(" + v.Value + ")";
 
                 newValues.Add(v.Key, newValue);
             }
