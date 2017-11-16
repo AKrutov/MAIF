@@ -102,7 +102,18 @@ namespace MAIF
 
             foreach(MAIF.ControllsClasses.ControlGroup group in this.paramGroups)
             {
-                allParams.AddRange(group.CurrentGroup.Params);
+                #if DEBUG 
+                    allParams.AddRange(group.CurrentGroup.Params);
+                #endif
+
+                #if RELEASE
+                if (group.IsValid())
+                {
+                    allParams.AddRange(group.CurrentGroup.Params);
+                }
+                else
+                    throw new Exception("Данные не валидны!");
+                #endif
             }
                  
             var resultForm = new ResultForm(allParams);

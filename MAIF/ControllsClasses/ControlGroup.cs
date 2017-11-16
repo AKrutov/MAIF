@@ -41,8 +41,8 @@ namespace MAIF.ControllsClasses
         public ControlGroup(Group currentGroup)
         {
             this.currentGroup = currentGroup;
-            
 
+            int maxTotalLength = 1000;
             int maxLabelLenght = 200;
             int maxInputLength = 200;
             int currentYPosition = 20;
@@ -56,8 +56,11 @@ namespace MAIF.ControllsClasses
                 }
             }
             
-            int _cWidth = 5 + maxInputLength + 5 + maxLabelLenght + 70;
+            int _cWidth = 5 + maxInputLength + 5 + maxLabelLenght + 80;
             this.MaxWidth = (_cWidth > this.MaxWidth) ? _cWidth : this.MaxWidth;
+
+            if (this.MaxWidth > maxTotalLength)
+                this.MaxWidth = 1000;
 
             this.Text = currentGroup.Desc;
             this.Font = new Font(DefaultFont.FontFamily, DefaultFont.Size, FontStyle.Bold);
@@ -67,15 +70,13 @@ namespace MAIF.ControllsClasses
 
             for (int i = 0; i < currentGroup.Params.Count; i++)
             {
-                if (currentGroup.Params[i].IsHidden == "1") continue; 
-
                 Label caption = new Label();
                 caption.Left = 5;
                 caption.Top = currentYPosition;
                 caption.Width = maxLabelLenght;
                 caption.Text = currentGroup.Params[i].Desc;
                 this.Controls.Add(caption);
-
+                
                 IAbstractControll _ctrl = new ControllFactory().CreateControl(currentGroup.Params[i]);
                 if (_ctrl.GetType() == typeof(DropDown) && (currentGroup.Params[i].Allow_add == null || currentGroup.Params[i].Allow_add != "0"))
                 {
@@ -92,22 +93,34 @@ namespace MAIF.ControllsClasses
                 ctrl.Location = new Point(maxLabelLenght + 5, currentYPosition);
                 this.Controls.Add(ctrl);
 
-                if (currentGroup.Params[i].Units != null)
-                {
-                    Label units = new Label();
-                    units.Top = currentYPosition;
-                    units.Left = maxLabelLenght + 5 + maxInputLength + 5;
-                    units.Width = 60;
-                    units.Text = currentGroup.Params[i].Units;
-                    this.Controls.Add(units);
-                }
 
                 foreach (Control ct in this.Controls)
                 {
                     ct.Font = new Font(DefaultFont.FontFamily, DefaultFont.Size, FontStyle.Regular);
                 }
 
-                currentYPosition = currentYPosition + 22;
+
+                
+                if (currentGroup.Params[i].IsHidden == "1")
+                {
+                    caption.Hide();
+                    ctrl.Hide();
+                }
+                else
+                {
+                    if (currentGroup.Params[i].Units != null)
+                    {
+                        Label units = new Label();
+                        units.Top = currentYPosition;
+                        units.Left = maxLabelLenght + 5 + maxInputLength + 5;
+                        units.Width = 60;
+                        units.Text = currentGroup.Params[i].Units;
+                        this.Controls.Add(units);
+                    }
+
+                    currentYPosition = currentYPosition + 22;
+                }
+            
             }
 
             this.Height = currentYPosition + 10;
