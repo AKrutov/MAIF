@@ -31,7 +31,8 @@ namespace MAIF.classes.ControllsClasses
         {
             if (this.CurrentParam.IsRequired == "1")
             {
-                return this.Text != "";
+                float result;
+                return (this.Text != "" && float.TryParse(this.Text,out result));
             }
             return true;
         }
