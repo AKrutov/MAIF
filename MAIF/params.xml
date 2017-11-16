@@ -1,6 +1,6 @@
 ﻿<root>
   <Group id="1" desc="Исходные данные для расчета" excel="B6">
-    <Param name="common_address" desc="Адрес дома" allow_edit="1" tooltip="Адрес, по которому дом будет расположен" />
+    <Param name="common_address" desc="Адрес дома" allow_edit="1" tooltip="Адрес, по которому дом будет расположен"/>
     <Param name="common_calc_date" desc="Дата, на которую производятся расчеты" value="%current_date%" tooltip="Текущая дата" allow_edit="0"/>
     <Param name="common_discont_value" desc="Ставка дисконтирования"  is_required="1" units="%" excel="D9:F9" allow_edit="1" tooltip="Должна быть равна ставке ЦБ на текущий год минус инфляция">
       <value>0</value>
