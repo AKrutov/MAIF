@@ -27,6 +27,12 @@ namespace MAIF
         public string Allow_edit { get; set; }
         [XmlAttribute(AttributeName = "formula")]
         public string Formula { get; set; }
+        [XmlAttribute(AttributeName = "is_hidden")]
+        public string IsHidden { get; set; }
+        [XmlAttribute(AttributeName = "is_required")]
+        public string IsRequired { get; set; }
+        [XmlAttribute(AttributeName = "scope")]
+        public string Scope { get; set; }
     }
 
     [Serializable]
