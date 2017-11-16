@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -24,6 +25,15 @@ namespace MAIF.classes.ControllsClasses
             this.Width = Width;
 
             return (TextBox)this;
+        }
+
+        public bool Validate()
+        {
+            if (this.CurrentParam.IsRequired == "1")
+            {
+                return this.Text != "";
+            }
+            return true;
         }
     }
 }
