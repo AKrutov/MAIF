@@ -1,8 +1,8 @@
 ﻿<root>
-  <Group id="1" desc="Исходные данные для расчета" excel="B6">
-    <Param name="common_address" desc="Адрес дома" allow_edit="1" tooltip="Адрес, по которому дом будет расположен" />
+  <Group id="1" desc="Исходные данные для расчета">
+    <Param name="common_address" desc="Адрес дома" allow_edit="1" tooltip="Адрес, по которому дом будет расположен"/>
     <Param name="common_calc_date" desc="Дата, на которую производятся расчеты" value="%current_date%" tooltip="Текущая дата" allow_edit="0"/>
-    <Param name="common_discont_value" desc="Ставка дисконтирования"  is_required="1" units="%" excel="D9:F9" allow_edit="1" tooltip="Должна быть равна ставке ЦБ на текущий год минус инфляция">
+    <Param name="common_discont_value" desc="Ставка дисконтирования"  is_required="1" units="%" allow_edit="1" tooltip="Должна быть равна ставке ЦБ на текущий год минус инфляция">
       <value>0</value>
       <value>0.5</value>
       <value>1</value>
@@ -82,8 +82,8 @@
     <Param name="costs_communal_fw_gvs" desc="ГВС"  is_required="1" allow_edit="1" units="руб./м куб."/>
     <Param name="costs_communal_fw_hvs" desc="ХВС"  is_required="1" allow_edit="1" units="руб./м куб."/>
     <Param name="costs_communal_fw_sewerage" desc="Канализация (водоотведение)"  is_required="1" allow_edit="1" units="руб./м куб."/>
-    <Param name="costs_communal_fw_sum_current" desc="СУММА" is_hidden="1" is_required="1" allow_edit="1" units="руб." formula="%costs_communal_fw_electricity[2]%+%costs_communal_fw_gas[2]%+%costs_communal_fw_solid[2]%+%costs_communal_fw_heating[2]%+%costs_communal_fw_gvs[2]%+%costs_communal_fw_hvs[2]%+%costs_communal_fw_sewerage[2]%"/>
-    <Param name="costs_communal_fw_sum" desc="Сумма за осенне-зимний период"  is_required="1" allow_edit="1" is_hidden="1" units="тыс. руб." formula="%costs_communal_fw_sum_current%/1000"/>
+    <Param name="costs_communal_fw_sum_current" desc="СУММА" scope="h1" is_hidden="1" is_required="1" allow_edit="1" units="руб." formula="%costs_communal_fw_electricity[2]%+%costs_communal_fw_gas[2]%+%costs_communal_fw_solid[2]%+%costs_communal_fw_heating[2]%+%costs_communal_fw_gvs[2]%+%costs_communal_fw_hvs[2]%+%costs_communal_fw_sewerage[2]%"/>
+    <Param name="costs_communal_fw_sum" desc="Сумма за осенне-зимний период" scope="h1" is_required="1" allow_edit="1" is_hidden="1" units="тыс. руб." formula="%costs_communal_fw_sum_current%/1000"/>
   </Group>
   <Group id="5" desc="Расходы на коммунальные ресурсы в весенне-летний период" h1="Стоимость коммунальных ресурсов при поставке из внешних сетей в весенне-летний период (тариф)" h2="Расчетное потребление ресурсов из внешних сетей, в весенне-летний период" h3="Расходы на оплату коммунальных ресурсов в весенне-летний период" h3_formula="h1*h2">
     <Param name="costs_communal_ss_electricity" desc="Электроэнергия"  is_required="1" allow_edit="1" units="руб./кВт.ч"/>
@@ -93,23 +93,23 @@
     <Param name="costs_communal_ss_gvs" desc="ГВС"  is_required="1" allow_edit="1" units="руб./м куб."/>
     <Param name="costs_communal_ss_hvs" desc="ХВС"  is_required="1" allow_edit="1" units="руб./м куб."/>
     <Param name="costs_communal_ss_sewerage" desc="Канализация (водоотведение)" is_required="1" allow_edit="1" units="руб./м куб."/>
-    <Param name="costs_communal_ss_sum_current" is_required="1" desc="СУММА"  is_hidden="1" allow_edit="1" units="руб." formula="%costs_communal_ss_electricity[2]%+%costs_communal_ss_gas[2]%+%costs_communal_ss_solid[2]%+%costs_communal_ss_heating[2]%+%costs_communal_ss_gvs[2]%+%costs_communal_ss_hvs[2]%+%costs_communal_ss_sewerage[2]%"/>
-    <Param name="costs_communal_ss_sum" desc="Сумма за весенне-летний период" allow_edit="1" is_hidden="1" units="тыс. руб." formula="%costs_communal_ss_sum_current%/1000"/>/>
+    <Param name="costs_communal_ss_sum_current" scope="h1" is_required="1" desc="СУММА"  is_hidden="1" allow_edit="1" units="руб." formula="%costs_communal_ss_electricity[2]%+%costs_communal_ss_gas[2]%+%costs_communal_ss_solid[2]%+%costs_communal_ss_heating[2]%+%costs_communal_ss_gvs[2]%+%costs_communal_ss_hvs[2]%+%costs_communal_ss_sewerage[2]%"/>
+    <Param name="costs_communal_ss_sum" scope="h1" desc="Сумма за весенне-летний период" allow_edit="1" is_hidden="1" units="тыс. руб." formula="%costs_communal_ss_sum_current%/1000"/>/>
   </Group>
   <Group id="6" desc="Расходы на коммунальные ресурсы, тыс. руб." h1="Расходы на оплату коммунальных ресурсов в месяц" h2="Количество месяцев в периоде" h3="Сумма" h3_formula="h1*h2">
     <Param name="costs_communal_sum_fw" desc="Осенне-зимний период" is_required="1" allow_edit="1" units="тыс. руб." value="%costs_communal_fw_sum%;7"/>
     <Param name="costs_communal_sum_ss" desc="Весенне-летний период" is_required="1" allow_edit="1" units="тыс. руб." value="%costs_communal_ss_sum%;5"/>
-    <Param name="costs_communal_sum_1" desc="СУММА за 12 месяцев" is_required="1" allow_edit="0" units="тыс. руб." formula="%costs_communal_sum_fw[0]%*%costs_communal_sum_fw[1]%+%costs_communal_sum_ss[0]%+%costs_communal_sum_ss[1]%"/>
-    <Param name="costs_communal_sum_30" desc="СУММА за 30 лет (в текущих ценах и без дисконтирования)"  is_hidden="1" is_required="1" allow_edit="1" units="тыс. руб." formula="%costs_communal_sum_1%*30"/>
-    <Param name="costs_communal_sum_gk" desc="Коэффициент зелености (Gk)"  is_required="1" allow_edit="1" value="1"/>
-    <Param name="costs_communal_sum_inflation_rate" desc="Среднегодовой темп роста цен (инфляция) за период"  is_required="1" allow_edit="1" units="%">
+    <Param name="costs_communal_sum_1" desc="СУММА за 12 месяцев" scope="h1" is_required="1" allow_edit="0" units="тыс. руб." formula="%costs_communal_sum_fw[0]%*%costs_communal_sum_fw[1]%+%costs_communal_sum_ss[0]%+%costs_communal_sum_ss[1]%"/>
+    <Param name="costs_communal_sum_30" desc="СУММА за 30 лет (в текущих ценах и без дисконтирования)" scope="h1" is_hidden="1" is_required="1" allow_edit="1" units="тыс. руб." formula="%costs_communal_sum_1%*30"/>
+    <Param name="costs_communal_sum_gk" desc="Коэффициент зелености (Gk)" scope="h1" is_required="1" allow_edit="1" value="1"/>
+    <Param name="costs_communal_sum_inflation_rate" desc="Среднегодовой темп роста цен (инфляция) за период" scope="h1" is_required="1" allow_edit="1" units="%">
       <value>3</value>
       <value>4</value>
       <value>5</value>
     </Param>
-    <Param name="costs_communal_sum_inflation_co" desc="Коэффициент роста цен за период"  is_hidden="1" is_required="1" allow_edit="1" formula="(1+%costs_communal_sum_30%)^30"/>
-    <Param name="costs_communal_sum_discount_r" desc="Фактор дисконтирования (R)"  is_hidden="1" is_required="1" allow_edit="1" formula="1/(1+%common_discont_value%)^30"/>
-    <Param name="costs_communal_sum_accurate" desc="Расходы на коммунальные ресурсы за 30 лет" is_hidden="1" is_required="1" allow_edit="1" units="тыс. руб." formula="%costs_communal_sum_1%*%costs_communal_sum_gk%*%costs_communal_sum_discount_r%"/>
+    <Param name="costs_communal_sum_inflation_co" desc="Коэффициент роста цен за период" scope="h1" is_hidden="1" is_required="1" allow_edit="1" formula="(1+%costs_communal_sum_30%)^30"/>
+    <Param name="costs_communal_sum_discount_r" desc="Фактор дисконтирования (R)" scope="h1" is_hidden="1" is_required="1" allow_edit="1" formula="1/(1+%common_discont_value%)^30"/>
+    <Param name="costs_communal_sum_accurate" desc="Расходы на коммунальные ресурсы за 30 лет" scope="h1" is_hidden="1" is_required="1" allow_edit="1" units="тыс. руб." formula="%costs_communal_sum_1%*%costs_communal_sum_gk%*%costs_communal_sum_discount_r%"/>
   </Group>
   <Group id="7" desc="Расходы на капитальный ремонт общего имущества в МКД (30 лет), тыс. руб." h1="Стоимость капитального ремонта общего имущества, тыс. рублей" h2="Периодичность капитального ремонта общего имущества, лет" h3="Расходы на капитальный ремонт общего имущества (30 лет), тыс. руб." h3_formula="(30/h2)*h1">
     <Param name="costs_repair_foundation" desc="фундамент" allow_edit="1" units="тыс. руб." value=";30;"/>
@@ -124,16 +124,16 @@
     <Param name="costs_repair_heating" desc="система отопления" allow_edit="1" units="тыс. руб." value=";15;"/>
     <Param name="costs_repair_water" desc="система водоснабжения" allow_edit="1" units="тыс. руб." value=";15;"/>
     <Param name="costs_repair_drainage" desc="система водоотведения" allow_edit="1" units="тыс. руб." value=";10;"/>
-    <Param name="costs_repair_sum" is_required="1" desc="СУММА за 30 лет (в текущих ценах и без дисконтирования)" allow_edit="1"  is_hidden="1" units="тыс. руб." formula="%costs_repair_foundation[2]%+%costs_repair_walls[2]%+%costs_repair_roof[2]%+%costs_repair_common[2]%+%costs_repair_garbage[2]%+%costs_repair_lifts[2]%+%costs_repair_ventilation[2]%+%costs_repair_electricity[2]%+%costs_repair_gas[2]%+%costs_repair_heating[2]%+%costs_repair_water[2]%+%costs_repair_drainage[2]%"/>
-    <Param name="costs_repair_sum_gk" desc="Коэффициент зелености (Gk)" is_required="1" allow_edit="1" value="1"/>
-    <Param name="costs_repair_sum_inflation_rate" is_required="1" desc="Среднегодовой темп роста цен (инфляция) за период" allow_edit="1" units="%">
+    <Param name="costs_repair_sum" is_required="1" scope="h1" desc="СУММА за 30 лет (в текущих ценах и без дисконтирования)" allow_edit="1"  is_hidden="1" units="тыс. руб." formula="%costs_repair_foundation[2]%+%costs_repair_walls[2]%+%costs_repair_roof[2]%+%costs_repair_common[2]%+%costs_repair_garbage[2]%+%costs_repair_lifts[2]%+%costs_repair_ventilation[2]%+%costs_repair_electricity[2]%+%costs_repair_gas[2]%+%costs_repair_heating[2]%+%costs_repair_water[2]%+%costs_repair_drainage[2]%"/>
+    <Param name="costs_repair_sum_gk" scope="h1" desc="Коэффициент зелености (Gk)" is_required="1" allow_edit="1" value="1"/>
+    <Param name="costs_repair_sum_inflation_rate" scope="h1" is_required="1" desc="Среднегодовой темп роста цен (инфляция) за период" allow_edit="1" units="%">
       <value>3</value>
       <value>4</value>
       <value>5</value>
     </Param>
-    <Param name="costs_repair_sum_inflation_co" is_required="1" is_hidden="1" desc="Коэффициент роста цен за период" allow_edit="1" formula="(1+%costs_repair_sum_inflation_rate%)^((%costs_repair_foundation[1]%+%costs_repair_walls[1]%+%costs_repair_roof[1]%+%costs_repair_common[1]%+%costs_repair_garbage[1]%+%costs_repair_lifts[1]%+%costs_repair_ventilation[1]%+%costs_repair_electricity[2]%+%costs_repair_gas[1]%+%costs_repair_heating[1]%+%costs_repair_water[1]%+%costs_repair_drainage[1]%)/12)"/>
-    <Param name="costs_repair_sum_discount_r" is_required="1" is_hidden="1" desc="Фактор дисконтирования (R)" allow_edit="1" formula="1/(1+%common_discont_value%)^((%costs_repair_foundation[1]%+%costs_repair_walls[1]%+%costs_repair_roof[1]%+%costs_repair_common[1]%+%costs_repair_garbage[1]%+%costs_repair_lifts[1]%+%costs_repair_ventilation[1]%+%costs_repair_electricity[2]%+%costs_repair_gas[1]%+%costs_repair_heating[1]%+%costs_repair_water[1]%+%costs_repair_drainage[1]%)/12)"/>
-    <Param name="costs_repair_sum_accurate" is_required="1" is_hidden="1" desc="Сумма с учетом поправок" allow_edit="1" units="тыс. руб." formula="%costs_repair_sum%*%costs_repair_sum_gk%*%costs_repair_sum_inflation_co%*%costs_repair_sum_discount_r%"/>
+    <Param name="costs_repair_sum_inflation_co" is_required="1" is_hidden="1" scope="h1" desc="Коэффициент роста цен за период" allow_edit="1" formula="(1+%costs_repair_sum_inflation_rate%)^((%costs_repair_foundation[1]%+%costs_repair_walls[1]%+%costs_repair_roof[1]%+%costs_repair_common[1]%+%costs_repair_garbage[1]%+%costs_repair_lifts[1]%+%costs_repair_ventilation[1]%+%costs_repair_electricity[2]%+%costs_repair_gas[1]%+%costs_repair_heating[1]%+%costs_repair_water[1]%+%costs_repair_drainage[1]%)/12)"/>
+    <Param name="costs_repair_sum_discount_r" is_required="1" is_hidden="1" scope="h1" desc="Фактор дисконтирования (R)" allow_edit="1" formula="1/(1+%common_discont_value%)^((%costs_repair_foundation[1]%+%costs_repair_walls[1]%+%costs_repair_roof[1]%+%costs_repair_common[1]%+%costs_repair_garbage[1]%+%costs_repair_lifts[1]%+%costs_repair_ventilation[1]%+%costs_repair_electricity[2]%+%costs_repair_gas[1]%+%costs_repair_heating[1]%+%costs_repair_water[1]%+%costs_repair_drainage[1]%)/12)"/>
+    <Param name="costs_repair_sum_accurate" is_required="1" is_hidden="1" scope="h1" desc="Сумма с учетом поправок" allow_edit="1" units="тыс. руб." formula="%costs_repair_sum%*%costs_repair_sum_gk%*%costs_repair_sum_inflation_co%*%costs_repair_sum_discount_r%"/>
   </Group>
   <Group id="8" desc="Расходы на текущий (плановый) ремонт общего имущества за 30 лет, тыс. руб." h1="Стоимость периодического ремонта общего имущества в МКД, тыс. рублей" h2="Периодичность ремонта общего имущества в МКД, лет" h3="Расходы на текущий ремонт общего имущества в МКД (30 лет), тыс. руб." h3_formula="(30/h2)*h1">
     <Param name="costs_repair_plan_foundation" desc="фундамент" allow_edit="1" units="тыс. руб." value=";10;"/>
@@ -148,16 +148,16 @@
     <Param name="costs_repair_plan_heating" desc="система отопления" allow_edit="1" units="тыс. руб." value=";5;"/>
     <Param name="costs_repair_plan_water" desc="система водоснабжения" allow_edit="1" units="тыс. руб." value=";5;"/>
     <Param name="costs_repair_plan_drainage" desc="система водоотведения" allow_edit="1" units="тыс. руб." value=";3;"/>
-    <Param name="costs_repair_plan_sum" is_required="1"  is_hidden="1" desc="СУММА за 30 лет (в текущих ценах и без дисконтирования)" allow_edit="1" units="тыс. руб." formula="%costs_repair_plan_foundation[2]%+%costs_repair_plan_walls[2]%+%costs_repair_plan_roof[2]%+%costs_repair_plan_common[2]%+%costs_repair_plan_garbage[2]%+%costs_repair_plan_lifts[2]%+%costs_repair_plan_ventilation[2]%+%costs_repair_plan_electricity[2]%+%costs_repair_plan_gas[2]%+%costs_repair_plan_heating[2]%+%costs_repair_plan_water[2]%+%costs_repair_plan_drainage[2]%"/>/>
-    <Param name="costs_repair_plan_gk" desc="Коэффициент зелености (Gk)" is_required="1" allow_edit="1" value="1"/>
-    <Param name="costs_repair_plan_sum_inflation_rate" is_required="1" desc="Среднегодовой темп роста цен (инфляция) за период" allow_edit="1" units="%">
+    <Param name="costs_repair_plan_sum" is_required="1" scope="h1" is_hidden="1" desc="СУММА за 30 лет (в текущих ценах и без дисконтирования)" allow_edit="1" units="тыс. руб." formula="%costs_repair_plan_foundation[2]%+%costs_repair_plan_walls[2]%+%costs_repair_plan_roof[2]%+%costs_repair_plan_common[2]%+%costs_repair_plan_garbage[2]%+%costs_repair_plan_lifts[2]%+%costs_repair_plan_ventilation[2]%+%costs_repair_plan_electricity[2]%+%costs_repair_plan_gas[2]%+%costs_repair_plan_heating[2]%+%costs_repair_plan_water[2]%+%costs_repair_plan_drainage[2]%"/>/>
+    <Param name="costs_repair_plan_gk" desc="Коэффициент зелености (Gk)"  scope="h1" is_required="1" allow_edit="1" value="1"/>
+    <Param name="costs_repair_plan_sum_inflation_rate" is_required="1"  scope="h1" desc="Среднегодовой темп роста цен (инфляция) за период" allow_edit="1" units="%">
       <value>3</value>
       <value>4</value>
       <value>5</value>
     </Param>
-    <Param name="costs_repair_plan_sum_inflation_co"  is_hidden="1" is_required="1" desc="Коэффициент роста цен за период" allow_edit="1" formula="(1+%costs_repair_sum_inflation_rate%)^((%costs_repair_plan_foundation[1]%+%costs_repair_plan_walls[1]%+%costs_repair_plan_roof[1]%+%costs_repair_plan_common[1]%+%costs_repair_plan_garbage[1]%+%costs_repair_plan_lifts[1]%+%costs_repair_plan_ventilation[1]%+%costs_repair_plan_electricity[2]%+%costs_repair_plan_gas[1]%+%costs_repair_plan_heating[1]%+%costs_repair_plan_water[1]%+%costs_repair_plan_drainage[1]%)/12)"/>
-    <Param name="costs_repair_plan_sum_discount_r"  is_hidden="1" is_required="1" desc="Фактор дисконтирования (R)" allow_edit="1" formula="1/(1+%common_discont_value%)^((%costs_repair_plan_foundation[1]%+%costs_repair_plan_walls[1]%+%costs_repair_plan_roof[1]%+%costs_repair_plan_common[1]%+%costs_repair_plan_garbage[1]%+%costs_repair_plan_lifts[1]%+%costs_repair_plan_ventilation[1]%+%costs_repair_plan_electricity[2]%+%costs_repair_plan_gas[1]%+%costs_repair_plan_heating[1]%+%costs_repair_plan_water[1]%+%costs_repair_plan_drainage[1]%)/12)"/>
-    <Param name="costs_repair_plan_sum_accurate"  is_hidden="1" is_required="1" desc="Сумма с учетом поправок" allow_edit="1" units="тыс. руб." formula="%costs_repair_plan_sum%*%costs_repair_plan_gk%*%costs_repair_plan_sum_inflation_co%*%costs_repair_plan_sum_discount_r%"/>
+    <Param name="costs_repair_plan_sum_inflation_co"  is_hidden="1" scope="h1" is_required="1" desc="Коэффициент роста цен за период" allow_edit="1" formula="(1+%costs_repair_sum_inflation_rate%)^((%costs_repair_plan_foundation[1]%+%costs_repair_plan_walls[1]%+%costs_repair_plan_roof[1]%+%costs_repair_plan_common[1]%+%costs_repair_plan_garbage[1]%+%costs_repair_plan_lifts[1]%+%costs_repair_plan_ventilation[1]%+%costs_repair_plan_electricity[2]%+%costs_repair_plan_gas[1]%+%costs_repair_plan_heating[1]%+%costs_repair_plan_water[1]%+%costs_repair_plan_drainage[1]%)/12)"/>
+    <Param name="costs_repair_plan_sum_discount_r"  is_hidden="1" scope="h1" is_required="1" desc="Фактор дисконтирования (R)" allow_edit="1" formula="1/(1+%common_discont_value%)^((%costs_repair_plan_foundation[1]%+%costs_repair_plan_walls[1]%+%costs_repair_plan_roof[1]%+%costs_repair_plan_common[1]%+%costs_repair_plan_garbage[1]%+%costs_repair_plan_lifts[1]%+%costs_repair_plan_ventilation[1]%+%costs_repair_plan_electricity[2]%+%costs_repair_plan_gas[1]%+%costs_repair_plan_heating[1]%+%costs_repair_plan_water[1]%+%costs_repair_plan_drainage[1]%)/12)"/>
+    <Param name="costs_repair_plan_sum_accurate"  is_hidden="1" is_required="1" scope="h1" desc="Сумма с учетом поправок" allow_edit="1" units="тыс. руб." formula="%costs_repair_plan_sum%*%costs_repair_plan_gk%*%costs_repair_plan_sum_inflation_co%*%costs_repair_plan_sum_discount_r%"/>
   </Group>
   <Group id="9" desc="Расходы на содержание общего имущества в МКД, тыс. руб.">
     <Param name="costs_maintenance_all" desc="Расходы на содержание общего имущества в МКД, тыс. руб. в год, в том числе:" is_required="1" allow_edit="1" units="тыс. руб." formula="%costs_maintenance_constructions%+%costs_maintenance_equipment%+%costs_maintenance_other%"/>
@@ -176,23 +176,25 @@
     <Param name="costs_maintenance_accurate" desc="Сумма расходов на содержание общего имущества с учетом поправок (за 30 лет)" is_hidden="1" is_required="1" allow_edit="1" units="тыс. руб." formula="%costs_maintenance_all%*%costs_maintenance_gk%*%costs_maintenance_inflation_co%*%costs_maintenance_discount_r%"/>
   </Group>
   <Group id="10" desc="Сводный расчет совокупной стоимости жизненного цикла здания (СЖЦЗ), тыс. руб." h1="Плановые показатели" h2="Факт без учета дисконтирования и без инфляции" h3="Факт с учетом дисконтирования и инфляции">
-    <Param name="costs_final_once_sum" desc="Единовременные затраты  всего, в том числе:" is_required="1" units="тыс. руб." formula="%costs_final_once_before_sum[0]%+%costs_final_once_after_sum[0]%;%costs_final_once_before_sum[1]%+%costs_final_once_after_sum[1]%;%costs_final_once_before_sum[2]%+%costs_final_once_after_sum[2]%"/>
-    <Param name="costs_final_once_before_sum" desc="Единовременные затраты на ввод в эксплуатацию" is_required="1" units="тыс. руб." formula=";%costs_before_sum_current%;%costs_before_sum_accurate%"/>
-    <Param name="costs_final_once_after_sum" desc="Единовременные затраты на утилизацию (снос)" is_required="1" units="тыс. руб." formula=";%costs_after_sum_current;%costs_after_sum_accurate%"/>
-    <Param name="costs_final_ek" desc="Коэффициент энергоэффективности (Ek)" is_required="1" units="" value="1"/>
-    <Param name="costs_final_once_sum_accurate" desc="Единовременные затраты с учетом поправок" is_required="1" units="тыс. руб." formula="%costs_final_once_sum[0]%*%costs_final_ek%;%costs_final_once_sum[1]%*%costs_final_ek%;%costs_final_once_sum[2]%*%costs_final_ek%"/>
-    <Param name="costs_final_period_sum" desc="Периодические затраты всего, в том числе:" is_required="1" units="тыс. руб." formula="%costs_final_period_communal_sum[0]%+%costs_final_period_repair_sum[0]%+%costs_final_period_plan_sum[0]%+%costs_final_period_maintenance_sum[0]%;%costs_final_period_communal_sum[1]%+%costs_final_period_repair_sum[1]%+%costs_final_period_plan_sum[1]%+%costs_final_period_maintenance_sum[1]%;%costs_final_period_communal_sum[2]%+%costs_final_period_repair_sum[2]%+%costs_final_period_plan_sum[2]%+%costs_final_period_maintenance_sum[2]%"/>
-    <Param name="costs_final_period_communal_sum" desc="Расходы на коммунальные ресурсы" is_required="1" units="тыс. руб." formula=";%costs_communal_sum_30%;%costs_communal_sum_accurate%"/>
-    <Param name="costs_final_period_repair_sum" desc="Расходы на капитальный ремонт общего имущества в МКД (30 лет)" is_required="1" units="тыс. руб." formula=";%costs_repair_sum%;%costs_repair_sum_accurate%"/>
-    <Param name="costs_final_period_plan_sum" desc="Расходы на текущий (плановый) ремонт общего имущества в МКД (30 лет)" is_required="1" units="тыс. руб." formula=";%costs_repair_plan_sum%;%costs_repair_plan_sum_accurate%"/>
-    <Param name="costs_final_period_maintenance_sum" desc="Расходы на содержание общего имущества в МКД" is_required="1" units="тыс. руб." formula=";%costs_maintenance_sum_30%;%costs_maintenance_accurate%"/>
-    <Param name="costs_final_gk" desc="Коэффициент зелености (Gk)" is_required="1" />
-    <Param name="costs_final_period_sum_accurate" desc="Периодические затраты с учетом поправок" is_required="1" units="тыс. руб." formula="%costs_final_period_sum[0]%*%costs_final_gk%;%costs_final_period_sum[1]%*%costs_final_gk%;%costs_final_period_sum[2]%*%costs_final_gk%"/>
-    <Param name="costs_final_sum" desc="Сумма затрат жизненного цикла (СЗЖЦ) без поправок" is_required="1" units="тыс. руб." formula="%costs_final_once_sum[0]%+%costs_final_period_sum[0]%;%costs_final_once_sum[1]%+%costs_final_period_sum[1]%;%costs_final_once_sum[2]%+%costs_final_period_sum[2]%"/>
-    <Param name="costs_final_sum_accurate" desc="Сумма затрат жизненного цикла (СЗЖЦ), с учетом поправок" is_required="1" units="тыс. руб." formula="%costs_final_once_sum_accurate[0]%+%costs_final_period_sum_accurate[0]%;%costs_final_once_sum_accurate[1]%+%costs_final_period_sum_accurate[1]%;%costs_final_once_sum_accurate[2]%+%costs_final_period_sum_accurate[2]%"/>
-    <Param name="costs_final_years" desc="Количество лет прогноза (до первого капитального ремонта)" is_required="1" value="30;30;30" units="лет"/>
-    <Param name="costs_final_sum_per_year" desc="Среднегодовая стоимость совокупных затрат жизненного цикла жилого здания (руб. в год) за весь объект" is_required="1" units="тыс. руб." formula="%costs_final_sum_accurate[0]%/%costs_final_years[0]%;%costs_final_sum_accurate[1]%/%costs_final_years[1]%;%costs_final_sum_accurate[1]%/%costs_final_years[1]%"/>
-    <Param name="costs_final_square" desc="Площадь здания (общая или полезная)" is_required="1" units="кв.м."/>
-    <Param name="costs_final_sum_result" desc="Стоимость совокупных затрат жизненного цикла жилого здания (СЗЖЦ), руб./кв.м./год" is_required="1" units="тыс. руб." formula="%costs_final_square[0]/costs_final_sum_per_year[0]%;%costs_final_square[1]/costs_final_sum_per_year[1]%;%costs_final_square[1]/costs_final_sum_per_year[1]%"/>
+    <Param name="costs_final_once_sum" desc="Единовременные затраты  всего, в том числе:" units="тыс. руб." formula="%costs_final_once_before_sum[0]%+%costs_final_once_after_sum[0]%;%costs_final_once_before_sum[1]%+%costs_final_once_after_sum[1]%;%costs_final_once_before_sum[2]%+%costs_final_once_after_sum[2]%"/>
+    <Param name="costs_final_once_before_sum" desc="Единовременные затраты на ввод в эксплуатацию" units="тыс. руб." formula=";%costs_before_sum_current%;%costs_before_sum_accurate%"/>
+    <Param name="costs_final_once_after_sum" desc="Единовременные затраты на утилизацию (снос)" units="тыс. руб." formula=";%costs_after_sum_current;%costs_after_sum_accurate%"/>
+    <Param name="costs_final_ek" desc="Коэффициент энергоэффективности (Ek)" units="" value="1"/>
+    <Param name="costs_final_once_sum_accurate" desc="Единовременные затраты с учетом поправок" units="тыс. руб." formula="%costs_final_once_sum[0]%*%costs_final_ek%;%costs_final_once_sum[1]%*%costs_final_ek%;%costs_final_once_sum[2]%*%costs_final_ek%"/>
+    <Param name="costs_final_period_sum" desc="Периодические затраты всего, в том числе:" units="тыс. руб." formula="%costs_final_period_communal_sum[0]%+%costs_final_period_repair_sum[0]%+%costs_final_period_plan_sum[0]%+%costs_final_period_maintenance_sum[0]%;%costs_final_period_communal_sum[1]%+%costs_final_period_repair_sum[1]%+%costs_final_period_plan_sum[1]%+%costs_final_period_maintenance_sum[1]%;%costs_final_period_communal_sum[2]%+%costs_final_period_repair_sum[2]%+%costs_final_period_plan_sum[2]%+%costs_final_period_maintenance_sum[2]%"/>
+    <Param name="costs_final_period_communal_sum" desc="Расходы на коммунальные ресурсы" units="тыс. руб." formula=";%costs_communal_sum_30%;%costs_communal_sum_accurate%"/>
+    <Param name="costs_final_period_repair_sum" desc="Расходы на капитальный ремонт общего имущества в МКД (30 лет)" units="тыс. руб." formula=";%costs_repair_sum%;%costs_repair_sum_accurate%"/>
+    <Param name="costs_final_period_plan_sum" desc="Расходы на текущий (плановый) ремонт общего имущества в МКД (30 лет)" units="тыс. руб." formula=";%costs_repair_plan_sum%;%costs_repair_plan_sum_accurate%"/>
+    <Param name="costs_final_period_maintenance_sum" desc="Расходы на содержание общего имущества в МКД" units="тыс. руб." formula=";%costs_maintenance_sum_30%;%costs_maintenance_accurate%"/>
+    <Param name="costs_final_gk" desc="Коэффициент зелености (Gk)" />
+    <Param name="costs_final_period_sum_accurate" desc="Периодические затраты с учетом поправок" units="тыс. руб." formula="%costs_final_period_sum[0]%*%costs_final_gk%;%costs_final_period_sum[1]%*%costs_final_gk%;%costs_final_period_sum[2]%*%costs_final_gk%"/>
+    <Param name="costs_final_sum" desc="Сумма затрат жизненного цикла (СЗЖЦ) без поправок" units="тыс. руб." formula="%costs_final_once_sum[0]%+%costs_final_period_sum[0]%;%costs_final_once_sum[1]%+%costs_final_period_sum[1]%;%costs_final_once_sum[2]%+%costs_final_period_sum[2]%"/>
+    <Param name="costs_final_sum_accurate" desc="Сумма затрат жизненного цикла (СЗЖЦ), с учетом поправок" units="тыс. руб." formula="%costs_final_once_sum_accurate[0]%+%costs_final_period_sum_accurate[0]%;%costs_final_once_sum_accurate[1]%+%costs_final_period_sum_accurate[1]%;%costs_final_once_sum_accurate[2]%+%costs_final_period_sum_accurate[2]%"/>
+    <Param name="costs_final_years" desc="Количество лет прогноза (до первого капитального ремонта)" value="30;30;30" units="лет"/>
+    <Param name="costs_final_sum_per_year" desc="Среднегодовая стоимость совокупных затрат жизненного цикла жилого здания (руб. в год) за весь объект" units="руб." formula="%costs_final_sum_accurate[0]%/%costs_final_years[0]%;%costs_final_sum_accurate[1]%/%costs_final_years[1]%;%costs_final_sum_accurate[1]%/%costs_final_years[1]%"/>
+    <Param name="costs_final_square" desc="Площадь здания (общая или полезная)" units="кв.м."/>
+    <Param name="costs_final_sum_result" desc="Стоимость совокупных затрат жизненного цикла жилого здания (СЗЖЦ)" units="руб./кв.м./год." formula="%costs_final_square[0]/costs_final_sum_per_year[0]%;%costs_final_square[1]/costs_final_sum_per_year[1]%;%costs_final_square[2]/costs_final_sum_per_year[2]%"/>
+    <Param name="costs_final_period_communal_template" is_hidden="1" desc="Расходы на коммунальные ресурсы на кв.м./год" units="руб./кв.м./год." formula="%costs_final_square[0]/(costs_final_period_sum[0]%/%costs_final_years[0]%);%costs_final_square[1]/(costs_final_period_sum[1]%/%costs_final_years[1]%);%costs_final_square[2]/(costs_final_period_sum[2]%/%costs_final_years[2]%)"/>
+
   </Group>
 </root>

@@ -9,6 +9,7 @@ namespace MAIF.classes.ControllsClasses
     public class DropDown : System.Windows.Forms.ComboBox, IAbstractControll
     {
         public Param CurrentParam { set; get; }
+        
 
         public void AddItem(DropDownItem item)
         {
@@ -45,6 +46,15 @@ namespace MAIF.classes.ControllsClasses
             return (ComboBox) this;
         }
 
+        public bool Validate(){
+            if(this.CurrentParam.IsRequired == "1")
+             {
+                 return (this.SelectedItem != null && this.SelectedItem.ToString() != "");
+            }
+
+            return true;
+        }
+
     }
     public class DropDownItem : Object
     {
@@ -57,4 +67,5 @@ namespace MAIF.classes.ControllsClasses
             this.Value = Value;
         }
     }
+    
 }

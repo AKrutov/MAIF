@@ -26,18 +26,6 @@ namespace MAIF
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            //String fileName = ExportHelper.Generate();
-
-            ResultForm f = new ResultForm();
-            f.Show();
-            LogHelper h = new LogHelper(true);
-            h.Info("Запущен расчет пользователем " + System.Security.Principal.WindowsIdentity.GetCurrent().Name); 
-            h.Info("Выполнен расчет пользователем " + Environment.UserName);
-
-        }
-
         private void CalcForm_Load(object sender, EventArgs e)
         {
             XmlRootAttribute xRoot = new XmlRootAttribute();
@@ -64,9 +52,9 @@ namespace MAIF
             
             mainControlPanel.Controls.Add(this.paramGroups[this.currentPanel]);
 
-            foreach (GroupBox item in this.paramGroups)
+            foreach (ControlGroup item in this.paramGroups)
             {
-                item.Width = this.maxWidth;    
+                item.SetWidth(this.maxWidth);    
             }
 
             mainControlPanel.Width = this.maxWidth; // Панель
@@ -107,8 +95,30 @@ namespace MAIF
 
         private void calculateBtn_Click(object sender, EventArgs e)
         {
-            Group paramGroup = ((MAIF.ControllsClasses.ControlGroup)this.mainControlPanel.Controls[0]).CurrentGroup;
-            paramGroup = paramGroup;
+            LogHelper h = new LogHelper(true);
+            h.Info("Запущен расчет пользователем " + System.Security.Principal.WindowsIdentity.GetCurrent().Name);
+
+            List<Param> allParams = new List<Param>();
+
+            foreach(MAIF.ControllsClasses.ControlGroup group in this.paramGroups)
+            {
+                #if DEBUG 
+                    allParams.AddRange(group.CurrentGroup.Params);
+                #endif
+
+                #if RELEASE
+                if (group.IsValid())
+                {
+                    allParams.AddRange(group.CurrentGroup.Params);
+                }
+                else
+                    throw new Exception("Данные не валидны!");
+                #endif
+            }
+                 
+            var resultForm = new ResultForm(allParams);
+            resultForm.Show();
+            h.Info("Выполнен расчет пользователем " + Environment.UserName);
         }
     }  
 }

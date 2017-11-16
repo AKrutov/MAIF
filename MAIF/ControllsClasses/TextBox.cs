@@ -29,7 +29,7 @@ namespace MAIF.classes.ControllsClasses
 
         public bool Validate()
         {
-            if (this.CurrentParam.IsRequired == "1")
+            if (this.CurrentParam.IsRequired == "1" && this.CurrentParam.IsHidden != "1")
             {
                 float result;
                 return (this.Text != "" && float.TryParse(this.Text,out result));
