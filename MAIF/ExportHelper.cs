@@ -80,9 +80,9 @@ namespace MAIF
 
         public static string FillTemplateHtml(Dictionary<string, string> values)
         {
-            string templateFileHtml = "template.html";
+            string templateFileHtml = "Resources\\template2.htm";
             string newName = System.IO.Path.GetRandomFileName() + ".htm";
-            newName = templateFileHtml.Replace("template.html", newName);
+            newName = templateFileHtml.Replace("template2.htm", newName).Replace("Resources\\","");
 
             File.Copy(templateFileHtml, newName);
 
@@ -110,9 +110,9 @@ namespace MAIF
 
         public static string FillTemplateDocx(Dictionary<string, string> values)
         {
-            string templateFileHtml = "template1.docx";
+            string templateFileHtml = "Resources\\template3.docx";
             string newName = System.IO.Path.GetRandomFileName() + ".docx";
-            newName = templateFileHtml.Replace("template1.docx", newName);
+            newName = templateFileHtml.Replace("template3.docx", newName).Replace("Resources\\", "");
 
             File.Copy(templateFileHtml, newName);
 

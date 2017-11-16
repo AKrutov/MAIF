@@ -191,8 +191,10 @@
     <Param name="costs_final_sum" desc="Сумма затрат жизненного цикла (СЗЖЦ) без поправок" units="тыс. руб." formula="%costs_final_once_sum[0]%+%costs_final_period_sum[0]%;%costs_final_once_sum[1]%+%costs_final_period_sum[1]%;%costs_final_once_sum[2]%+%costs_final_period_sum[2]%"/>
     <Param name="costs_final_sum_accurate" desc="Сумма затрат жизненного цикла (СЗЖЦ), с учетом поправок" units="тыс. руб." formula="%costs_final_once_sum_accurate[0]%+%costs_final_period_sum_accurate[0]%;%costs_final_once_sum_accurate[1]%+%costs_final_period_sum_accurate[1]%;%costs_final_once_sum_accurate[2]%+%costs_final_period_sum_accurate[2]%"/>
     <Param name="costs_final_years" desc="Количество лет прогноза (до первого капитального ремонта)" value="30;30;30" units="лет"/>
-    <Param name="costs_final_sum_per_year" desc="Среднегодовая стоимость совокупных затрат жизненного цикла жилого здания (руб. в год) за весь объект" units="тыс. руб." formula="%costs_final_sum_accurate[0]%/%costs_final_years[0]%;%costs_final_sum_accurate[1]%/%costs_final_years[1]%;%costs_final_sum_accurate[1]%/%costs_final_years[1]%"/>
+    <Param name="costs_final_sum_per_year" desc="Среднегодовая стоимость совокупных затрат жизненного цикла жилого здания (руб. в год) за весь объект" units="руб." formula="%costs_final_sum_accurate[0]%/%costs_final_years[0]%;%costs_final_sum_accurate[1]%/%costs_final_years[1]%;%costs_final_sum_accurate[1]%/%costs_final_years[1]%"/>
     <Param name="costs_final_square" desc="Площадь здания (общая или полезная)" units="кв.м."/>
-    <Param name="costs_final_sum_result" desc="Стоимость совокупных затрат жизненного цикла жилого здания (СЗЖЦ), руб./кв.м./год" units="тыс. руб." formula="%costs_final_square[0]/costs_final_sum_per_year[0]%;%costs_final_square[1]/costs_final_sum_per_year[1]%;%costs_final_square[1]/costs_final_sum_per_year[1]%"/>
+    <Param name="costs_final_sum_result" desc="Стоимость совокупных затрат жизненного цикла жилого здания (СЗЖЦ)" units="руб./кв.м./год." formula="%costs_final_square[0]/costs_final_sum_per_year[0]%;%costs_final_square[1]/costs_final_sum_per_year[1]%;%costs_final_square[2]/costs_final_sum_per_year[2]%"/>
+    <Param name="costs_final_period_communal_template" is_hidden="1" desc="Расходы на коммунальные ресурсы на кв.м./год" units="руб./кв.м./год." formula="%costs_final_square[0]/(costs_final_period_sum[0]%/%costs_final_years[0]%);%costs_final_square[1]/(costs_final_period_sum[1]%/%costs_final_years[1]%);%costs_final_square[2]/(costs_final_period_sum[2]%/%costs_final_years[2]%)"/>
+
   </Group>
 </root>

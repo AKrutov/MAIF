@@ -14,15 +14,16 @@ namespace MAIF
     {
         //String fileName;
         Dictionary<string, string> values;
-        public ResultForm()
+        public ResultForm(List<Param> paramList)
         {
             InitializeComponent();
             //this.fileName = fileName;
-            values = new Dictionary<string, string>();
-            values.Add("test1", "1");
-            values.Add("test2", "2");
-            values.Add("test3", "test");
-            values.Add("test4", "%test1%+%test2%");
+            //values = new Dictionary<string, string>();
+            //values.Add("test1", "1");
+            //values.Add("test2", "2");
+            //values.Add("test3", "test");
+            //values.Add("test4", "%test1%+%test2%");
+            values = Utilities.ConvertParamsToValues(paramList);
             values = SettingsHelper.ProcessValues(values);
         }
 

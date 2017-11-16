@@ -26,18 +26,6 @@ namespace MAIF
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            //String fileName = ExportHelper.Generate();
-
-            ResultForm f = new ResultForm();
-            f.Show();
-            LogHelper h = new LogHelper(true);
-            h.Info("Запущен расчет пользователем " + System.Security.Principal.WindowsIdentity.GetCurrent().Name); 
-            h.Info("Выполнен расчет пользователем " + Environment.UserName);
-
-        }
-
         private void CalcForm_Load(object sender, EventArgs e)
         {
             XmlRootAttribute xRoot = new XmlRootAttribute();
@@ -107,8 +95,15 @@ namespace MAIF
 
         private void calculateBtn_Click(object sender, EventArgs e)
         {
+            LogHelper h = new LogHelper(true);
+            h.Info("Запущен расчет пользователем " + System.Security.Principal.WindowsIdentity.GetCurrent().Name);
+
             Group paramGroup = ((MAIF.ControllsClasses.ControlGroup)this.mainControlPanel.Controls[0]).CurrentGroup;
             paramGroup = paramGroup;
+
+            var resultForm = new ResultForm(paramGroup.Params);
+            resultForm.Show();
+            h.Info("Выполнен расчет пользователем " + Environment.UserName);
         }
     }  
 }

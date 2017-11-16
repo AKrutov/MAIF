@@ -16,6 +16,17 @@ namespace MAIF
             loDataTable.Rows.Add(0);
             return (double)(loDataTable.Rows[0]["Eval"]);
         }
+
+        public static Dictionary<string, string> ConvertParamsToValues(List<Param> paramList)
+        {
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            foreach(var param in paramList)
+            {
+                dict.Add(param.Name, param.Value);
+            }
+            dict.Add("current_date", DateTime.Now.Date.ToShortDateString());
+            return dict;
+        }
     }
 
 
