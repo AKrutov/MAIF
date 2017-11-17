@@ -52,9 +52,9 @@ namespace MAIF.ControllsClasses
 
                     if (this.Controls[i].Name == "units")
                         this.Controls[i].Left = this.Controls[i].Left + ctrlWidthDiff;
+                    }
                 }
             }
-        }
 
         protected void setColumnedWidth(int value)
         {
@@ -147,7 +147,7 @@ namespace MAIF.ControllsClasses
                     maxInputLength = (currentGroup.Params[i].Values[n].Length * multiplier > maxInputLength) ? currentGroup.Params[i].Values[n].Length * multiplier : maxInputLength;
                 }
             }
-
+            
             int _cWidth = 5 + maxInputLength + 5 + maxLabelLenght + 60;
             this.MaxWidth = (_cWidth > this.MaxWidth) ? _cWidth : this.MaxWidth;
 
@@ -169,12 +169,12 @@ namespace MAIF.ControllsClasses
                 caption.Width = maxLabelLenght;
                 caption.Text = currentGroup.Params[i].Desc;
                 this.Controls.Add(caption);
-
+                
                 IAbstractControll _ctrl = new ControllFactory().CreateControl(currentGroup.Params[i]);
                 if (_ctrl.GetType() == typeof(DropDown) && (currentGroup.Params[i].Allow_add == null || currentGroup.Params[i].Allow_add != "0"))
                 {
                     ((DropDown)_ctrl).AddItem(new DropDownItem("-- Новое значение --", null));
-                    ((DropDown)_ctrl).SelectedIndexChanged += ControlGroup_SelectedIndexChanged;
+                    ((DropDown)_ctrl).SelectedIndexChanged += ControlGroup_SelectedIndexChanged;     
                 }
 
                 if (_ctrl.GetType() == typeof(MAIF.classes.ControllsClasses.TextBox))
@@ -189,7 +189,7 @@ namespace MAIF.ControllsClasses
 
                 foreach (Control ct in this.Controls)
                     ct.Font = new Font(DefaultFont.FontFamily, DefaultFont.Size, FontStyle.Regular);
-
+                
                 if (currentGroup.Params[i].IsHidden == "1")
                 {
                     caption.Hide();
@@ -210,7 +210,7 @@ namespace MAIF.ControllsClasses
 
                     currentYPosition = currentYPosition + 22;
                 }
-
+            
             }
 
             this.Height = currentYPosition + 10;
@@ -218,12 +218,56 @@ namespace MAIF.ControllsClasses
 
         protected void createColumnedGroup(Group currentGroup)
         {
-            this.currentGroup = currentGroup;
-            this.Text = currentGroup.Desc;
-            this.Font = new Font(DefaultFont.FontFamily, DefaultFont.Size, FontStyle.Bold);
-            this.Top = 20;
-            this.Left = 5;
-            this.Width = (this.MaxWidth > 0) ? this.MaxWidth : 600;
+            ((MAIF.classes.ControllsClasses.TextBox)sender).CurrentParam.Value = ((MAIF.classes.ControllsClasses.TextBox)sender).Text;
+        }
+
+        void ControlGroup_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DropDown currentControl = (DropDown)sender;
+
+            if ((string)currentControl.SelectedItem == "-- Новое значение --")
+            {
+                var form = new TextInputForm();
+                form.Text = "Добавление нового элемента в справочник";
+                var result = form.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    
+                    currentControl.Items.RemoveAt(currentControl.Items.Count - 1);
+                    currentControl.AddItem(new DropDownItem(form.NewValue, null));
+                    currentControl.AddItem(new DropDownItem("-- Новое значение --", null));
+                    currentControl.SelectedItem = currentControl.Items[currentControl.FindStringExact(form.NewValue)];
+
+                    currentControl.CurrentParam.Values.Add(form.NewValue);
+                    currentControl.CurrentParam.Value = form.NewValue;
+                }
+            }
+
+            ((MAIF.classes.ControllsClasses.DropDown)sender).CurrentParam.Value = ((MAIF.classes.ControllsClasses.DropDown)sender).SelectedItem.ToString();
+
+        }
+
+        public bool IsValid()
+        {
+            bool isValid = true;
+            for(int i = 0; i<this.Controls.Count; i++)
+            {
+                if (this.Controls[i].GetType() == typeof(MAIF.classes.ControllsClasses.TextBox) || this.Controls[i].GetType() == typeof(MAIF.classes.ControllsClasses.DropDown))
+                {
+                    if (((IAbstractControll)this.Controls[i]).Validate())
+                    {
+                        isValid = isValid && true;
+                        ((Label)this.Controls[i - 1]).ForeColor = Color.Black;
+                    }
+                    else
+                    {
+                        isValid = isValid && false;
+                        ((Label)this.Controls[i - 1]).ForeColor = Color.Red;
+                    }
+                }
+            }
+
+            return isValid;
         }
     }
 }

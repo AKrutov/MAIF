@@ -13,6 +13,10 @@ namespace MAIF.classes.ControllsClasses
         public void Fill(Param param)
         {
             this.CurrentParam = param;
+            if (this.CurrentParam.Value == "%current_date%") this.Text = DateTime.Now.ToShortDateString();
+            if (!String.IsNullOrWhiteSpace(this.CurrentParam.Value))
+                if (this.CurrentParam.Value.IndexOfAny(new char[] { '%', '!', '=' }) < 0)
+                    this.Text = this.CurrentParam.Value;
         }
         public Control AsControl()
         {
