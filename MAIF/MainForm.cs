@@ -17,10 +17,14 @@ namespace MAIF
 {
     public partial class MainForm : Form
     {
+        XmlRootAttribute xRoot = new XmlRootAttribute();
+        
         public MainForm()
         {
             InitializeComponent();
             StartPosition = FormStartPosition.CenterScreen;
+            xRoot.ElementName = "ArrayOfGroup";
+            xRoot.IsNullable = true;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -41,15 +45,35 @@ namespace MAIF
 
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
-            SettingsForm t = new SettingsForm();
-            t.Show(this);
+            Stream myStream = null;
+            OpenFileDialog theDialog = new OpenFileDialog();
+            theDialog.Title = "Open import file";
+            theDialog.Filter = "XML files|*.xml";
+            theDialog.InitialDirectory = Directory.GetCurrentDirectory();
+            if (theDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    if ((myStream = theDialog.OpenFile()) != null)
+                    {
+                        using (StreamReader reader = new StreamReader(myStream))
+                        {
+                            var groups = (List<Group>)(new XmlSerializer(typeof(List<Group>), xRoot)).Deserialize(reader);
+
+                            CalcForm t = new CalcForm(groups);
+                            t.Show(this);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
+                }
+            }
         }
 
         private void toolStripButton3_Click(object sender, EventArgs e)
-        {
-            XmlRootAttribute xRoot = new XmlRootAttribute();
-            xRoot.ElementName = "ArrayOfGroup";
-            xRoot.IsNullable = true;
+        {           
 
             var paramsPath = "params.xml";
             string path = Directory.GetCurrentDirectory();

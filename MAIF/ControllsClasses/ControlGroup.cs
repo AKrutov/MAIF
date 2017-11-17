@@ -170,6 +170,9 @@ namespace MAIF.ControllsClasses
                     currentControl.CurrentParam.Value = form.NewValue;
                 }
             }
+
+            ((MAIF.classes.ControllsClasses.DropDown)sender).CurrentParam.Value = ((MAIF.classes.ControllsClasses.DropDown)sender).SelectedItem.ToString();
+
         }
 
         public bool IsValid()
