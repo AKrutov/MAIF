@@ -1,4 +1,5 @@
-﻿<root>
+﻿<?xml version="1.0"?>
+<ArrayOfGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Group id="1" desc="Исходные данные для расчета">
     <Param name="common_address" desc="Адрес дома" allow_edit="1" tooltip="Адрес, по которому дом будет расположен"/>
     <Param name="common_calc_date" desc="Дата, на которую производятся расчеты" value="%current_date%" tooltip="Текущая дата" allow_edit="0"/>
@@ -197,4 +198,4 @@
     <Param name="costs_final_period_communal_template" is_hidden="1" desc="Расходы на коммунальные ресурсы на кв.м./год" units="руб./кв.м./год." formula="%costs_final_square[0]/(costs_final_period_sum[0]%/%costs_final_years[0]%);%costs_final_square[1]/(costs_final_period_sum[1]%/%costs_final_years[1]%);%costs_final_square[2]/(costs_final_period_sum[2]%/%costs_final_years[2]%)"/>
 
   </Group>
-</root>
+</ArrayOfGroup>
