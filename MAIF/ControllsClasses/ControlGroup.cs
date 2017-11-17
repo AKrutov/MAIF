@@ -81,55 +81,6 @@ namespace MAIF.ControllsClasses
             ((MAIF.classes.ControllsClasses.TextBox)sender).CurrentParam.Value = ((MAIF.classes.ControllsClasses.TextBox)sender).Text;
         }
 
-        void ControlGroup_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            DropDown currentControl = (DropDown)sender;
-
-            if ((string)currentControl.SelectedItem == "-- Новое значение --")
-            {
-                var form = new TextInputForm();
-                form.Text = "Добавление нового элемента в справочник";
-                var result = form.ShowDialog();
-                if (result == DialogResult.OK)
-                {
-                    
-                    currentControl.Items.RemoveAt(currentControl.Items.Count - 1);
-                    currentControl.AddItem(new DropDownItem(form.NewValue, null));
-                    currentControl.AddItem(new DropDownItem("-- Новое значение --", null));
-                    currentControl.SelectedItem = currentControl.Items[currentControl.FindStringExact(form.NewValue)];
-
-                    currentControl.CurrentParam.Values.Add(form.NewValue);
-                    currentControl.CurrentParam.Value = form.NewValue;
-                }
-            }
-        }
-
-        public bool IsValid()
-        {
-            bool isValid = true;
-            for(int i = 0; i<this.Controls.Count; i++)
-            {
-                if (this.Controls[i].GetType() == typeof(MAIF.classes.ControllsClasses.TextBox) || this.Controls[i].GetType() == typeof(MAIF.classes.ControllsClasses.DropDown))
-                {
-                    if (((IAbstractControll)this.Controls[i]).Validate())
-                    {
-                        isValid = isValid && true;
-                        ((Label)this.Controls[i - 1]).ForeColor = Color.Black;
-                    }
-                    else
-                    {
-                        isValid = isValid && false;
-                        ((Label)this.Controls[i - 1]).ForeColor = Color.Red;
-                    }
-                }
-            }
-            #if DEBUG
-                        return true;
-            #else
-                        return isValid;
-            #endif
-        }
-    
         protected void createSimpleGroup(Group currentGroup)
         {
             this.currentGroup = currentGroup;
@@ -218,7 +169,7 @@ namespace MAIF.ControllsClasses
 
         protected void createColumnedGroup(Group currentGroup)
         {
-            ((MAIF.classes.ControllsClasses.TextBox)sender).CurrentParam.Value = ((MAIF.classes.ControllsClasses.TextBox)sender).Text;
+            
         }
 
         void ControlGroup_SelectedIndexChanged(object sender, EventArgs e)
@@ -244,13 +195,13 @@ namespace MAIF.ControllsClasses
             }
 
             ((MAIF.classes.ControllsClasses.DropDown)sender).CurrentParam.Value = ((MAIF.classes.ControllsClasses.DropDown)sender).SelectedItem.ToString();
-
         }
 
+        
         public bool IsValid()
         {
             bool isValid = true;
-            for(int i = 0; i<this.Controls.Count; i++)
+            for (int i = 0; i < this.Controls.Count; i++)
             {
                 if (this.Controls[i].GetType() == typeof(MAIF.classes.ControllsClasses.TextBox) || this.Controls[i].GetType() == typeof(MAIF.classes.ControllsClasses.DropDown))
                 {
@@ -266,8 +217,12 @@ namespace MAIF.ControllsClasses
                     }
                 }
             }
-
+#if DEBUG
+            return true;
+#else
             return isValid;
+#endif
         }
+
     }
 }
