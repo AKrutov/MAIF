@@ -21,26 +21,17 @@ namespace MAIF
         int currentPanel = 0;
         int maxWidth = 400;
 
-        public CalcForm()
+        public CalcForm(List<Group> groups)
         {
             InitializeComponent();
+            controllGroups = groups;
         }
 
         private void CalcForm_Load(object sender, EventArgs e)
         {
-            XmlRootAttribute xRoot = new XmlRootAttribute();
-            xRoot.ElementName = "root";
-            xRoot.IsNullable = true;
-
             mainControlPanel.Width = mainControlPanel.Parent.Width;
             mainControlPanel.Height = mainControlPanel.Parent.Height - 100;
 
-            using (StreamReader reader = new StreamReader("params.xml"))
-            {
-                this.controllGroups = (List<Group>)(new XmlSerializer(typeof(List<Group>), xRoot)).Deserialize(reader);
-            }
-
-            
             foreach (var item in this.controllGroups)
             {
                 ControlGroup gBox = new ControlGroup(item);
@@ -99,23 +90,33 @@ namespace MAIF
             h.Info("Запущен расчет пользователем " + System.Security.Principal.WindowsIdentity.GetCurrent().Name);
 
             List<Param> allParams = new List<Param>();
+            //List<Group> allGroups = new List<Group>();
 
             foreach(MAIF.ControllsClasses.ControlGroup group in this.paramGroups)
             {
-                #if DEBUG 
+                #if DEBUG
+                    //allGroups.Add(group.CurrentGroup);
                     allParams.AddRange(group.CurrentGroup.Params);
                 #endif
 
                 #if RELEASE
                 if (group.IsValid())
                 {
+                    //allGroups.Add(group.CurrentGroup);
                     allParams.AddRange(group.CurrentGroup.Params);
                 }
                 else
                     throw new Exception("Данные не валидны!");
                 #endif
             }
-                 
+
+            XmlSerializer ser = new XmlSerializer(typeof(List<Group>));
+
+            using (FileStream fs = new FileStream(@"params_"+DateTime.Now.ToShortDateString()+"_"+DateTime.Now.Ticks.ToString()+".xml", FileMode.Create))
+            {
+                ser.Serialize(fs, controllGroups);
+            }
+
             var resultForm = new ResultForm(allParams);
             resultForm.Show();
             h.Info("Выполнен расчет пользователем " + Environment.UserName);

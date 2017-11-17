@@ -1,11 +1,17 @@
-﻿using System;
+﻿using MAIF.classes;
+using MAIF.ControllsClasses;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Serialization;
+
 
 namespace MAIF
 {
@@ -41,8 +47,27 @@ namespace MAIF
 
         private void toolStripButton3_Click(object sender, EventArgs e)
         {
-            CalcForm t = new CalcForm();
-            t.Show(this);
+            XmlRootAttribute xRoot = new XmlRootAttribute();
+            xRoot.ElementName = "ArrayOfGroup";
+            xRoot.IsNullable = true;
+
+            var paramsPath = "params.xml";
+            string path = Directory.GetCurrentDirectory();
+
+            var myFile = new DirectoryInfo(path).GetFiles().Where(x=>x.Name.IndexOf("params_")>=0)
+             .OrderByDescending(f => f.LastWriteTime)
+             .FirstOrDefault();
+
+            if (myFile != null)
+                paramsPath = myFile.Name; 
+
+            using (StreamReader reader = new StreamReader(paramsPath))
+            {
+                var groups = (List<Group>)(new XmlSerializer(typeof(List<Group>), xRoot)).Deserialize(reader);
+
+                CalcForm t = new CalcForm(groups);
+                t.Show(this);
+            }
         }
 
         private void toolStripButton4_Click(object sender, EventArgs e)
