@@ -90,6 +90,9 @@
     <Compile Include="ControllsClasses\DropDown.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ControllsClasses\MultipleTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ControllsClasses\TextBox.cs">
       <SubType>Component</SubType>
     </Compile>

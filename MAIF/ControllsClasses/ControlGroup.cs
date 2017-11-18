@@ -11,7 +11,177 @@ namespace MAIF.ControllsClasses
 {
     class ControlGroup : GroupBox
     {
-        protected Group currentGroup;
+        private int multiplier = 6;
+        private Group currentGroup;
+
+        private void createSimpleGroup()
+        {
+            int maxTotalLength = 1200;
+            int maxLabelLenght = 200;
+            int maxInputLength = 200;
+            int currentYPosition = 20;
+
+            /* Расчет размеров формы */
+            for (int i = 0; i < this.currentGroup.Params.Count; i++)
+            {
+                maxLabelLenght = (this.currentGroup.Params[i].Desc.Length * multiplier > maxLabelLenght) ? this.currentGroup.Params[i].Desc.Length * multiplier : maxLabelLenght;
+                for (int n = 0; n < this.currentGroup.Params[i].Values.Count; n++)
+                {
+                    maxInputLength = (this.currentGroup.Params[i].Values[n].Length * multiplier > maxInputLength) ? this.currentGroup.Params[i].Values[n].Length * multiplier : maxInputLength;
+                }
+            }
+
+            int _cWidth = 5 + maxInputLength + 5 + maxLabelLenght + 60;
+            this.MaxWidth = (_cWidth > this.MaxWidth) ? _cWidth : this.MaxWidth;
+
+            if (this.MaxWidth > maxTotalLength)
+                this.MaxWidth = maxTotalLength;
+
+            this.Width = this.MaxWidth;
+            /* Конец расчета размеров */
+
+            for (int i = 0; i < this.currentGroup.Params.Count; i++)
+            {
+                Label caption = new Label();
+                caption.Name = "caption";
+                caption.Left = 5;
+                caption.Top = currentYPosition;
+                caption.Width = maxLabelLenght;
+                caption.Text = this.currentGroup.Params[i].Desc;
+                this.Controls.Add(caption);
+
+                IAbstractControll _ctrl = new ControllFactory().CreateControl(this.currentGroup.Params[i]);
+                if (_ctrl.GetType() == typeof(DropDown) && (this.currentGroup.Params[i].Allow_add == null || this.currentGroup.Params[i].Allow_add != "0"))
+                {
+                    ((DropDown)_ctrl).AddItem(new DropDownItem("-- Новое значение --", null));
+                    ((DropDown)_ctrl).SelectedIndexChanged += ControlGroup_SelectedIndexChanged;
+                }
+
+                if (_ctrl.GetType() == typeof(MAIF.classes.ControllsClasses.TextBox))
+                {
+                    ((MAIF.classes.ControllsClasses.TextBox)_ctrl).TextChanged += ControlGroup_TextChanged;
+                }
+
+                Control ctrl = _ctrl.AsControl(maxInputLength);
+                ctrl.Location = new Point(maxLabelLenght + 5, currentYPosition);
+                this.Controls.Add(ctrl);
+
+
+                foreach (Control ct in this.Controls)
+                    ct.Font = new Font(DefaultFont.FontFamily, DefaultFont.Size, FontStyle.Regular);
+
+                if (this.currentGroup.Params[i].IsHidden == "1")
+                {
+                    caption.Hide();
+                    ctrl.Hide();
+                }
+                else
+                {
+                    if (this.currentGroup.Params[i].Units != null)
+                    {
+                        Label units = new Label();
+                        units.Name = "units";
+                        units.Top = currentYPosition;
+                        units.Left = maxLabelLenght + 5 + maxInputLength + 5;
+                        units.Width = 55;
+                        units.Text = this.currentGroup.Params[i].Units;
+                        this.Controls.Add(units);
+                    }
+
+                    currentYPosition = currentYPosition + 22;
+                }
+            }
+            this.Height = currentYPosition + 10;
+        }
+
+        private void createMultyValueGroup()
+        {
+           
+            // Добавляем заголовки колонок
+
+            int columns = 0;
+            int curHeadLabelXPosition = 215;
+            int curHeadLabelWidth = 180;
+            int curHeadLabelHeight = 50;
+            int curHeadLabelTop = 20;
+            int curRowHeight = 22;
+            int curControlPadding = 5;
+            int curLabelWidth = 200;
+
+            if (this.currentGroup.H1 != null)
+            {
+                Label H1Label = new Label();
+                H1Label.Name = "h1lbl";
+                H1Label.Top = curHeadLabelTop;
+                H1Label.Text = this.currentGroup.H1;
+                H1Label.Left = curHeadLabelXPosition;
+                H1Label.Width = curHeadLabelWidth;
+                H1Label.Height = curHeadLabelHeight;
+
+                this.Controls.Add(H1Label);
+                curHeadLabelXPosition = curHeadLabelXPosition + H1Label.Width;
+                columns++;
+            }
+
+            if (this.currentGroup.H2 != null)
+            {
+                Label H2Label = new Label();
+                H2Label.Name = "h2lbl";
+                H2Label.Top = curHeadLabelTop;
+                H2Label.Text = this.currentGroup.H2;
+                H2Label.Left = curHeadLabelXPosition;
+                H2Label.Width = curHeadLabelWidth;
+                H2Label.Height = curHeadLabelHeight;
+
+                this.Controls.Add(H2Label);
+                curHeadLabelXPosition = curHeadLabelXPosition + H2Label.Width;
+                columns++;
+            }
+
+            if (this.currentGroup.H3 != null)
+            {
+                Label H3Label = new Label();
+                H3Label.Name = "h2lbl";
+                H3Label.Top = curHeadLabelTop;
+                H3Label.Text = this.currentGroup.H3;
+                H3Label.Left = curHeadLabelXPosition;
+                H3Label.Width = curHeadLabelWidth;
+                H3Label.Height = curHeadLabelHeight;
+
+                this.Controls.Add(H3Label);
+                curHeadLabelXPosition = curHeadLabelXPosition + H3Label.Width;
+                columns++;
+            }
+
+            int currentYPosition = curHeadLabelTop + curHeadLabelHeight;
+
+            for (int i = 0; i < this.currentGroup.Params.Count; i++)
+            {
+                Param currentParam = this.currentGroup.Params[i];
+
+                Label caption = new Label();
+                caption.Name = "caption";
+                caption.Left = curControlPadding;
+                caption.Top = currentYPosition;
+                caption.Text = currentParam.Desc;
+                caption.Width = curLabelWidth;
+                this.Controls.Add(caption);
+
+                IAbstractControll _ctrl = new ControllFactory().CreateControl(this.currentGroup.Params[i], columns);
+                Control ctrl = _ctrl.AsControl();
+                ctrl.Location = new Point(curLabelWidth + curControlPadding, currentYPosition);
+                this.Controls.Add(ctrl);
+
+                currentYPosition = currentYPosition + curRowHeight;
+            }
+
+            this.Height = currentYPosition + curRowHeight;
+
+            foreach (Control ct in this.Controls)
+                ct.Font = new Font(DefaultFont.FontFamily, DefaultFont.Size, FontStyle.Regular);
+
+        }
+
         public Group CurrentGroup { 
             get
             {
@@ -30,6 +200,7 @@ namespace MAIF.ControllsClasses
                 this.currentGroup = value;
             } 
         }
+       
         public int MaxWidth { get; set; }
         public void SetWidth(int value)
         {
@@ -51,8 +222,6 @@ namespace MAIF.ControllsClasses
                 }
             }
         }
-        private int multiplier = 6;
-
         public GroupBox asControl() 
         {
             return (GroupBox) this;
@@ -62,86 +231,15 @@ namespace MAIF.ControllsClasses
         {
             this.currentGroup = currentGroup;
 
-            int maxTotalLength = 1200;
-            int maxLabelLenght = 200;
-            int maxInputLength = 200;
-            int currentYPosition = 20;
-
-            for (int i = 0; i < currentGroup.Params.Count; i++)
-            {
-                maxLabelLenght = (currentGroup.Params[i].Desc.Length * multiplier > maxLabelLenght) ? currentGroup.Params[i].Desc.Length * multiplier : maxLabelLenght;
-                for (int n = 0; n < currentGroup.Params[i].Values.Count; n++)
-                {
-                    maxInputLength = (currentGroup.Params[i].Values[n].Length * multiplier > maxInputLength) ? currentGroup.Params[i].Values[n].Length * multiplier : maxInputLength;
-                }
-            }
-            
-            int _cWidth = 5 + maxInputLength + 5 + maxLabelLenght + 60;
-            this.MaxWidth = (_cWidth > this.MaxWidth) ? _cWidth : this.MaxWidth;
-
-            if (this.MaxWidth > maxTotalLength)
-                this.MaxWidth = maxTotalLength;
-
             this.Text = currentGroup.Desc;
             this.Font = new Font(DefaultFont.FontFamily, DefaultFont.Size, FontStyle.Bold);
             this.Top = 20;
             this.Left = 5;
-            this.Width = this.MaxWidth;
-
-            for (int i = 0; i < currentGroup.Params.Count; i++)
-            {
-                Label caption = new Label();
-                caption.Name = "caption";
-                caption.Left = 5;
-                caption.Top = currentYPosition;
-                caption.Width = maxLabelLenght;
-                caption.Text = currentGroup.Params[i].Desc;
-                this.Controls.Add(caption);
-                
-                IAbstractControll _ctrl = new ControllFactory().CreateControl(currentGroup.Params[i]);
-                if (_ctrl.GetType() == typeof(DropDown) && (currentGroup.Params[i].Allow_add == null || currentGroup.Params[i].Allow_add != "0"))
-                {
-                    ((DropDown)_ctrl).AddItem(new DropDownItem("-- Новое значение --", null));
-                    ((DropDown)_ctrl).SelectedIndexChanged += ControlGroup_SelectedIndexChanged;     
-                }
-
-                if (_ctrl.GetType() == typeof(MAIF.classes.ControllsClasses.TextBox))
-                {
-                    ((MAIF.classes.ControllsClasses.TextBox)_ctrl).TextChanged += ControlGroup_TextChanged;
-                }
-
-                Control ctrl = _ctrl.AsControl(maxInputLength);
-                ctrl.Location = new Point(maxLabelLenght + 5, currentYPosition);
-                this.Controls.Add(ctrl);
-
-
-                foreach (Control ct in this.Controls)
-                    ct.Font = new Font(DefaultFont.FontFamily, DefaultFont.Size, FontStyle.Regular);
-                
-                if (currentGroup.Params[i].IsHidden == "1")
-                {
-                    caption.Hide();
-                    ctrl.Hide();
-                }
-                else
-                {
-                    if (currentGroup.Params[i].Units != null)
-                    {
-                        Label units = new Label();
-                        units.Name = "units";
-                        units.Top = currentYPosition;
-                        units.Left = maxLabelLenght + 5 + maxInputLength + 5;
-                        units.Width = 55;
-                        units.Text = currentGroup.Params[i].Units;
-                        this.Controls.Add(units);
-                    }
-
-                    currentYPosition = currentYPosition + 22;
-                }
             
-            }
-
-            this.Height = currentYPosition + 10;
+            if(currentGroup.H1 != null || currentGroup.H2 != null || currentGroup.H3 != null)
+                this.createMultyValueGroup();
+            else
+                this.createSimpleGroup();
         }
 
         void ControlGroup_TextChanged(object sender, EventArgs e)
@@ -194,8 +292,11 @@ namespace MAIF.ControllsClasses
                     }
                 }
             }
-
+#if DEBUG
+            return true;
+#else
             return isValid;
+#endif
         }
     }
 }
