@@ -12,6 +12,7 @@ namespace MAIF
 {
     public partial class ResultForm : Form
     {
+        String currentTemplateName = "template1.html";
         //String fileName;
         Dictionary<string, string> values;
         String htmlTemplateName;
@@ -19,12 +20,7 @@ namespace MAIF
         public ResultForm(List<Param> paramList)
         {
             InitializeComponent();
-            //this.fileName = fileName;
-            //values = new Dictionary<string, string>();
-            //values.Add("test1", "1");
-            //values.Add("test2", "2");
-            //values.Add("test3", "test");
-            //values.Add("test4", "%test1%+%test2%");
+        
             values = Utilities.ConvertParamsToValues(paramList);
             values = SettingsHelper.ProcessValues(values);
         }
@@ -42,7 +38,7 @@ namespace MAIF
         private void ResultForm_Load(object sender, EventArgs e)
         {
             string curDir = Directory.GetCurrentDirectory();
-            htmlTemplateName = ExportHelper.FillTemplateHtml(values);
+            htmlTemplateName = ExportHelper.FillTemplateHtml(values, currentTemplateName);
             this.webBrowser1.Url = new Uri(String.Format("file:///{0}/"+ htmlTemplateName, curDir));
         }
 
