@@ -7,35 +7,57 @@ using System.Windows.Forms;
 
 namespace MAIF.ControllsClasses
 {
-    public class MultipleTextBox : System.Windows.Forms.Panel, IAbstractControll 
+    public class MultipleTextBox : System.Windows.Forms.Panel, IAbstractControll
     {
         private string[] scope;
         private string[] formulas;
         private string[] values;
 
         private int controlSpace = 10;
+        private Param currentParam;
 
-        public Param CurrentParam { set; get; }
+        public Param CurrentParam
+        {
+            get
+            {
+                List<string> values = new List<string>();
+                if (currentParam.IsHidden != "1")
+                {
+                    foreach (TextBox item in this.Controls)
+                    {
+                        values.Add(item.Text);
+                    }
+                    currentParam.Value = string.Join(";", values);
+                }
+              //  else
+                //    currentParam.Value = "";
+                return currentParam;
+            }
+            set
+            {
+                this.currentParam = value;
+            }
+        }
 
         public MultipleTextBox(Param param, int cols)
         {
             this.Height = 22;
             this.Width = 700;
-            
-            this.CurrentParam = param;
 
-            if (this.CurrentParam.Scope != null)
-                scope = this.CurrentParam.Scope.Split(';');
+            this.currentParam = param;
+
+            if (this.currentParam.Scope != null)
+                scope = this.currentParam.Scope.Split(';');
             else
                 scope = new string[] { "h1", "h2", "h3" };
 
-            if (this.CurrentParam.Value != null)
-                values = this.CurrentParam.Value.Split(';');
+            if (this.currentParam.Value != null)
+                values = this.currentParam.Value.Split(';');
             else
                 values = new string[] { "", "", "" };
 
-            if (this.CurrentParam.Formula != null)
-                formulas = this.CurrentParam.Formula.Split(';');
+            if (this.currentParam.Formula != null)
+                formulas = this.currentParam.Formula.Split(';');
             else
                 formulas = new string[] { "", "", "" };
 
@@ -48,24 +70,22 @@ namespace MAIF.ControllsClasses
                 ctrl.Width = controlWidth;
                 ctrl.Location = new System.Drawing.Point(controlWidth * n, 0);
                 ctrl.TextChanged += ctrl_TextChanged;
-                ctrl.Text = (n <= this.values.Length - 1) ? values[n] : "";
-
-                if (!scope.Contains("h" + (n + 1).ToString()))
+                
+                if (scope.Contains("h" + (n + 1).ToString()))
                 {
-                    ctrl.Hide();
+                    ctrl.Text = values[n];
+                    this.Controls.Add(ctrl);
                 }
-
-                this.Controls.Add(ctrl);
-                 
+                
             }
         }
 
         void ctrl_TextChanged(object sender, EventArgs e)
         {
-            this.CurrentParam.Value = ((TextBox)sender).Text;
+            this.currentParam.Value = ((TextBox)sender).Text;
         }
 
-        public void Fill(Param param){}
+        public void Fill(Param param) { }
 
         public Control AsControl()
         {
@@ -80,7 +100,12 @@ namespace MAIF.ControllsClasses
 
         public bool Validate()
         {
-            return true;
+            bool result = true;
+
+            if (this.CurrentParam.IsHidden != "1" && this.Text.IndexOfAny(new char[] { '%', '!', '=' }) > 0)
+                result = false;
+
+            return result;
         }
     }
 }

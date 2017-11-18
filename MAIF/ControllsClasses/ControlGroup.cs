@@ -123,13 +123,14 @@ namespace MAIF.ControllsClasses
                 foreach (Control ct in this.Controls)
                     ct.Font = new Font(DefaultFont.FontFamily, DefaultFont.Size, FontStyle.Regular);
 
-                if (this.currentGroup.Params[i].IsHidden == "1")
-                {
-                    caption.Hide();
-                    ctrl.Hide();
-                }
-                else
-                {
+                //if (this.currentGroup.Params[i].IsHidden == "1")
+                //{
+                    //caption.Hide();
+                    //ctrl.Hide();
+
+                //}
+                //else
+                //{
                     if (this.currentGroup.Params[i].Units != null)
                     {
                         Label units = new Label();
@@ -141,8 +142,10 @@ namespace MAIF.ControllsClasses
                         this.Controls.Add(units);
                     }
 
+                ctrl.Enabled = (this.currentGroup.Params[i].IsHidden != "1");
+
                     currentYPosition = currentYPosition + 22;
-                }
+                //}
             }
             this.Height = currentYPosition + 10;
         }
@@ -212,7 +215,7 @@ namespace MAIF.ControllsClasses
                 caption.Top = currentYPosition;
                 caption.Text = currentParam.Desc;
                 caption.Width = curLabelWidth;
-                if(currentParam.IsHidden != "1")
+               // if(currentParam.IsHidden != "1")
                     this.Controls.Add(caption);
 
                 IAbstractControll _ctrl = new ControllFactory().CreateControl(this.currentGroup.Params[i], columns);
@@ -225,11 +228,13 @@ namespace MAIF.ControllsClasses
                 else
                     ctrlWidth = (ctrlWidth < ctrl.Width) ? ctrl.Width : ctrlWidth;
 
-                if (currentParam.IsHidden != "1")
-                {
-                    this.Controls.Add(ctrl);
+                
+                if (currentParam.IsHidden == "1")
+                    ctrl.Enabled = false;
+                //else
                     currentYPosition = currentYPosition + curRowHeight;
-                }
+
+                this.Controls.Add(ctrl);
             }
 
             this.Height = currentYPosition + curRowHeight;
@@ -293,7 +298,10 @@ namespace MAIF.ControllsClasses
             bool isValid = true;
             for (int i = 0; i < this.Controls.Count; i++)
             {
-                if (this.Controls[i].GetType() == typeof(MAIF.classes.ControllsClasses.TextBox) || this.Controls[i].GetType() == typeof(MAIF.classes.ControllsClasses.DropDown))
+                if (this.Controls[i].GetType() == typeof(MAIF.classes.ControllsClasses.TextBox) 
+                    || this.Controls[i].GetType() == typeof(MAIF.classes.ControllsClasses.DropDown)
+                    || this.Controls[i].GetType() == typeof(MAIF.ControllsClasses.MultipleTextBox)
+                    )
                 {
                     if (((IAbstractControll)this.Controls[i]).Validate())
                     {
@@ -305,6 +313,7 @@ namespace MAIF.ControllsClasses
                         isValid = isValid && false;
                         ((Label)this.Controls[i - 1]).ForeColor = Color.Red;
                     }
+
                 }
             }
 #if DEBUG

@@ -40,12 +40,17 @@ namespace MAIF.classes.ControllsClasses
 
         public bool Validate()
         {
+            bool result = true;
             if (this.CurrentParam.IsRequired == "1" && this.CurrentParam.IsHidden != "1")
             {
-                double result;
-                return (this.Text != "" && double.TryParse(this.Text.Replace('.',','), out result));
+                double value;
+                return (this.Text != "" && double.TryParse(this.Text.Replace('.',','), out value ));
             }
-            return true;
+
+            if (this.CurrentParam.IsHidden != "1" && this.Text.IndexOfAny(new char[] { '%', '!', '=' }) > 0)
+                result = false;
+
+            return result;
         }
     }
 }
