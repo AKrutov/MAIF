@@ -83,7 +83,14 @@ namespace MAIF
                 mainControlPanel.Controls.Clear();
                 mainControlPanel.Controls.Add(this.paramGroups[this.currentPanel]);
 
-            }
+                prevBtn.Enabled = true;
+                if (this.currentPanel == this.paramGroups.Count - 1)
+                    nextBtn.Enabled = false;
+                else
+                    nextBtn.Enabled = true;
+
+            }      
+
             #endif
         }
 
@@ -95,7 +102,14 @@ namespace MAIF
 
                 mainControlPanel.Controls.Clear();
                 mainControlPanel.Controls.Add(this.paramGroups[this.currentPanel]);
-                
+
+                nextBtn.Enabled = true;
+
+                if (this.currentPanel == 0)
+                    prevBtn.Enabled = false;
+                else
+                    prevBtn.Enabled = true;
+
             }
         }
 
@@ -105,24 +119,23 @@ namespace MAIF
             h.Info("Запущен расчет пользователем " + System.Security.Principal.WindowsIdentity.GetCurrent().Name);
 
             List<Param> allParams = new List<Param>();
-            //List<Group> allGroups = new List<Group>();
-
+            
             foreach(MAIF.ControllsClasses.ControlGroup group in this.paramGroups)
             {
-#if DEBUG
+
+                #if DEBUG
                     //allGroups.Add(group.CurrentGroup);
                     allParams.AddRange(group.CurrentGroup.Params);
-#endif
+                #endif
 
-#if RELEASE
+                #if RELEASE
                 if (group.IsValid())
                 {
-                    //allGroups.Add(group.CurrentGroup);
                     allParams.AddRange(group.CurrentGroup.Params);
                 }
                 else
                     throw new Exception("Данные не валидны!");
-#endif
+                #endif
             }
 
             XmlSerializer ser = new XmlSerializer(typeof(List<Group>));

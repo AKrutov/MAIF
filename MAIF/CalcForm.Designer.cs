@@ -54,7 +54,7 @@
             this.mainControlPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainControlPanel.Location = new System.Drawing.Point(0, 0);
             this.mainControlPanel.Name = "mainControlPanel";
-            this.mainControlPanel.Size = new System.Drawing.Size(657, 544);
+            this.mainControlPanel.Size = new System.Drawing.Size(657, 629);
             this.mainControlPanel.TabIndex = 1;
             // 
             // buttonPanel
@@ -64,7 +64,7 @@
             this.buttonPanel.Controls.Add(this.prevBtn);
             this.buttonPanel.Controls.Add(calculateBtn);
             this.buttonPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.buttonPanel.Location = new System.Drawing.Point(0, 507);
+            this.buttonPanel.Location = new System.Drawing.Point(0, 592);
             this.buttonPanel.Name = "buttonPanel";
             this.buttonPanel.Size = new System.Drawing.Size(657, 37);
             this.buttonPanel.TabIndex = 2;
@@ -81,6 +81,7 @@
             // 
             // prevBtn
             // 
+            this.prevBtn.Enabled = false;
             this.prevBtn.Location = new System.Drawing.Point(5, 8);
             this.prevBtn.Name = "prevBtn";
             this.prevBtn.Size = new System.Drawing.Size(112, 23);
@@ -93,7 +94,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(657, 544);
+            this.ClientSize = new System.Drawing.Size(657, 629);
             this.Controls.Add(this.buttonPanel);
             this.Controls.Add(this.mainControlPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
