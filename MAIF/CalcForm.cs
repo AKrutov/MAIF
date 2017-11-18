@@ -62,20 +62,6 @@ namespace MAIF
 
         private void nextBtn_Click(object sender, EventArgs e)
         {
-            #if DEBUG
-            ((ControlGroup)this.paramGroups[this.currentPanel]).IsValid();
-            if (this.currentPanel < this.paramGroups.Count - 1)
-            {
-                this.currentPanel = this.currentPanel + 1;
-
-                mainControlPanel.Controls.Clear();
-                mainControlPanel.Controls.Add(this.paramGroups[this.currentPanel]);
-
-            }
-            #endif
-
-            #if RELEASE
-
             if (this.currentPanel < this.paramGroups.Count - 1 && ((ControlGroup)this.paramGroups[this.currentPanel]).IsValid() )
             {
                 this.currentPanel = this.currentPanel + 1;
@@ -88,10 +74,7 @@ namespace MAIF
                     nextBtn.Enabled = false;
                 else
                     nextBtn.Enabled = true;
-
             }      
-
-            #endif
         }
 
         private void prevBtn_Click(object sender, EventArgs e)
@@ -124,7 +107,6 @@ namespace MAIF
             {
 
                 #if DEBUG
-                    //allGroups.Add(group.CurrentGroup);
                     allParams.AddRange(group.CurrentGroup.Params);
                 #endif
 

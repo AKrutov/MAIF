@@ -11,6 +11,7 @@ namespace MAIF.ControllsClasses
 {
     class ControlGroup : GroupBox
     {
+        private int multiplier = 6;
         protected Group currentGroup;
         public Group CurrentGroup { 
             get
@@ -18,7 +19,7 @@ namespace MAIF.ControllsClasses
                 currentGroup.Params.Clear();
                 foreach (Control item in this.Controls)
                 {
-                    if (item.GetType() == typeof(MAIF.classes.ControllsClasses.TextBox) || item.GetType() == typeof(DropDown))
+                    if (item.GetType() == typeof(MAIF.classes.ControllsClasses.TextBox) || item.GetType() == typeof(DropDown) || item.GetType() == typeof(MultipleTextBox))
                     {
                         currentGroup.Params.Add(((IAbstractControll)item).CurrentParam);
                     }
@@ -61,26 +62,13 @@ namespace MAIF.ControllsClasses
             this.Width = value;
         }
 
-        private int multiplier = 6;
-        private Group currentGroup;
-
-        private void createSimpleGroup()
-        {
-            if (currentGroup.H1 == null)
-                this.createSimpleGroup(currentGroup);
-            else
-                this.createColumnedGroup(currentGroup);
-        }
-
         void ControlGroup_TextChanged(object sender, EventArgs e)
         {
             ((MAIF.classes.ControllsClasses.TextBox)sender).CurrentParam.Value = ((MAIF.classes.ControllsClasses.TextBox)sender).Text;
         }
 
-        protected void createSimpleGroup(Group currentGroup)
+        protected void createSimpleGroup()
         {
-            this.currentGroup = currentGroup;
-
             int maxTotalLength = 1200;
             int maxLabelLenght = 200;
             int maxInputLength = 200;
@@ -161,64 +149,58 @@ namespace MAIF.ControllsClasses
 
         private void createMultyValueGroup()
         {
-           
             // Добавляем заголовки колонок
 
             int columns = 0;
-            int curHeadLabelXPosition = 215;
-            int curHeadLabelWidth = 180;
+            int curHeadLabelXPosition = 360;
+            int curHeadLabelWidth = 250;
             int curHeadLabelHeight = 50;
             int curHeadLabelTop = 20;
             int curRowHeight = 22;
-            int curControlPadding = 5;
-            int curLabelWidth = 200;
+            int curControlPadding = 10;
+            int curLabelWidth = 350;
+            int ctrlWidth = 600;
+
+            int currentYPosition = curHeadLabelTop + curHeadLabelHeight;
+
+            Label H1Label = new Label();
+            Label H2Label = new Label();
+            Label H3Label = new Label();
 
             if (this.currentGroup.H1 != null)
             {
-                Label H1Label = new Label();
                 H1Label.Name = "h1lbl";
                 H1Label.Top = curHeadLabelTop;
                 H1Label.Text = this.currentGroup.H1;
-                H1Label.Left = curHeadLabelXPosition;
                 H1Label.Width = curHeadLabelWidth;
                 H1Label.Height = curHeadLabelHeight;
 
                 this.Controls.Add(H1Label);
-                curHeadLabelXPosition = curHeadLabelXPosition + H1Label.Width;
                 columns++;
             }
 
             if (this.currentGroup.H2 != null)
             {
-                Label H2Label = new Label();
                 H2Label.Name = "h2lbl";
                 H2Label.Top = curHeadLabelTop;
                 H2Label.Text = this.currentGroup.H2;
-                H2Label.Left = curHeadLabelXPosition;
                 H2Label.Width = curHeadLabelWidth;
                 H2Label.Height = curHeadLabelHeight;
-
                 this.Controls.Add(H2Label);
-                curHeadLabelXPosition = curHeadLabelXPosition + H2Label.Width;
                 columns++;
             }
 
             if (this.currentGroup.H3 != null)
             {
-                Label H3Label = new Label();
                 H3Label.Name = "h2lbl";
                 H3Label.Top = curHeadLabelTop;
                 H3Label.Text = this.currentGroup.H3;
-                H3Label.Left = curHeadLabelXPosition;
                 H3Label.Width = curHeadLabelWidth;
                 H3Label.Height = curHeadLabelHeight;
-
                 this.Controls.Add(H3Label);
-                curHeadLabelXPosition = curHeadLabelXPosition + H3Label.Width;
                 columns++;
             }
 
-            int currentYPosition = curHeadLabelTop + curHeadLabelHeight;
 
             for (int i = 0; i < this.currentGroup.Params.Count; i++)
             {
@@ -230,14 +212,24 @@ namespace MAIF.ControllsClasses
                 caption.Top = currentYPosition;
                 caption.Text = currentParam.Desc;
                 caption.Width = curLabelWidth;
-                this.Controls.Add(caption);
+                if(currentParam.IsHidden != "1")
+                    this.Controls.Add(caption);
 
                 IAbstractControll _ctrl = new ControllFactory().CreateControl(this.currentGroup.Params[i], columns);
                 Control ctrl = _ctrl.AsControl();
-                ctrl.Location = new Point(curLabelWidth + curControlPadding, currentYPosition);
-                this.Controls.Add(ctrl);
 
-                currentYPosition = currentYPosition + curRowHeight;
+                ctrl.Location = new Point(curLabelWidth + curControlPadding, currentYPosition);
+                
+                if (ctrl.GetType() == typeof(DropDown))
+                    ctrl.Width = ctrlWidth / columns - 30;
+                else
+                    ctrlWidth = (ctrlWidth < ctrl.Width) ? ctrl.Width : ctrlWidth;
+
+                if (currentParam.IsHidden != "1")
+                {
+                    this.Controls.Add(ctrl);
+                    currentYPosition = currentYPosition + curRowHeight;
+                }
             }
 
             this.Height = currentYPosition + curRowHeight;
@@ -245,48 +237,12 @@ namespace MAIF.ControllsClasses
             foreach (Control ct in this.Controls)
                 ct.Font = new Font(DefaultFont.FontFamily, DefaultFont.Size, FontStyle.Regular);
 
+            H1Label.Width = H2Label.Width = H3Label.Width = ctrlWidth / columns - 30;
+            H1Label.Left = curHeadLabelXPosition;
+            H2Label.Left = curHeadLabelXPosition + H1Label.Width;
+            H3Label.Left = curHeadLabelXPosition + H1Label.Width+ H2Label.Width;
         }
 
-        public Group CurrentGroup { 
-            get
-            {
-                currentGroup.Params.Clear();
-                foreach (Control item in this.Controls)
-                {
-                    if (item.GetType() == typeof(MAIF.classes.ControllsClasses.TextBox) || item.GetType() == typeof(DropDown))
-                    {
-                        currentGroup.Params.Add(((IAbstractControll)item).CurrentParam);
-                    }
-                }
-                return currentGroup;
-            } 
-            set 
-            {
-                this.currentGroup = value;
-            } 
-        }
-       
-        public int MaxWidth { get; set; }
-        public void SetWidth(int value)
-        {
-            int ctrlWidthDiff = value - MaxWidth;
-            this.Width = value;
-            if(ctrlWidthDiff>0)
-            {
-                for (int i = 0; i < this.Controls.Count; i++ )
-                {
-                    if (this.Controls[i].GetType() == typeof(MAIF.classes.ControllsClasses.DropDown) || this.Controls[i].GetType() == typeof(MAIF.classes.ControllsClasses.TextBox))
-                    {
-                        this.Controls[i].Width = this.Controls[i].Width + ctrlWidthDiff;
-                    }
-
-                    if(this.Controls[i].Name == "units")
-                    {
-                        this.Controls[i].Left = this.Controls[i].Left + ctrlWidthDiff;
-                    }
-                }
-            }
-        }
         public GroupBox asControl() 
         {
             return (GroupBox) this;
@@ -306,8 +262,6 @@ namespace MAIF.ControllsClasses
             else
                 this.createSimpleGroup();
         }
-
-        void ControlGroup_TextChanged(object sender, EventArgs e)
 
         void ControlGroup_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -334,7 +288,6 @@ namespace MAIF.ControllsClasses
             ((MAIF.classes.ControllsClasses.DropDown)sender).CurrentParam.Value = ((MAIF.classes.ControllsClasses.DropDown)sender).SelectedItem.ToString();
         }
 
-        
         public bool IsValid()
         {
             bool isValid = true;

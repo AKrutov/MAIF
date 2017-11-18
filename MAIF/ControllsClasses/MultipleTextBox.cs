@@ -20,7 +20,7 @@ namespace MAIF.ControllsClasses
         public MultipleTextBox(Param param, int cols)
         {
             this.Height = 22;
-            this.Width = 820;
+            this.Width = 700;
             
             this.CurrentParam = param;
 
@@ -62,7 +62,7 @@ namespace MAIF.ControllsClasses
 
         void ctrl_TextChanged(object sender, EventArgs e)
         {
-            //throw new NotImplementedException();
+            this.CurrentParam.Value = ((TextBox)sender).Text;
         }
 
         public void Fill(Param param){}

@@ -11,7 +11,7 @@ namespace MAIF.classes
     {
         IAbstractControll ctrl;
 
-        public IAbstractControll CreateControl(Param control, int    cols = 0) 
+        public IAbstractControll CreateControl(Param control, int cols = 0) 
         {
             if (control.Values.Count > 0)
             {

@@ -42,8 +42,8 @@ namespace MAIF.classes.ControllsClasses
         {
             if (this.CurrentParam.IsRequired == "1" && this.CurrentParam.IsHidden != "1")
             {
-                float result;
-                return (this.Text != "" && float.TryParse(this.Text,out result));
+                double result;
+                return (this.Text != "" && double.TryParse(this.Text.Replace('.',','), out result));
             }
             return true;
         }
