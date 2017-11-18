@@ -176,6 +176,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
+    <None Include="Resources\template1.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\template2.htm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

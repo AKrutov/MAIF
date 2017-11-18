@@ -25,6 +25,8 @@ namespace MAIF
             StartPosition = FormStartPosition.CenterScreen;
             xRoot.ElementName = "ArrayOfGroup";
             xRoot.IsNullable = true;
+
+            var x = Utilities.ConvertPow("Math.Pow(1,1)");
         }
 
         private void Form1_Load(object sender, EventArgs e)
