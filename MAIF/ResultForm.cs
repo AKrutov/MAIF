@@ -54,5 +54,17 @@ namespace MAIF
         {
             ((WebBrowser)webBrowser1).ShowPrintPreviewDialog();            
         }
+
+        private void toolStripButton4_Click(object sender, EventArgs e)
+        {
+            if (currentTemplateName == "template1.html")
+                currentTemplateName = "template2.htm";
+            else
+                currentTemplateName = "template1.html";
+
+            string curDir = Directory.GetCurrentDirectory();
+            htmlTemplateName = ExportHelper.FillTemplateHtml(values, currentTemplateName);
+            this.webBrowser1.Url = new Uri(String.Format("file:///{0}/" + htmlTemplateName, curDir));
+        }
     }
 }
