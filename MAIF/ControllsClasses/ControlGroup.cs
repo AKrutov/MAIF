@@ -33,24 +33,34 @@ namespace MAIF.ControllsClasses
         public int MaxWidth { get; set; }
         public void SetWidth(int value)
         {
+            if (this.currentGroup.H1 == null)
+                this.setSimpleWidth(value);
+            else
+                this.setColumnedWidth(value);
+        }
+
+        protected void setSimpleWidth(int value)
+        {
             int ctrlWidthDiff = value - MaxWidth;
             this.Width = value;
-            if(ctrlWidthDiff>0)
+            if (ctrlWidthDiff > 0)
             {
-                for (int i = 0; i < this.Controls.Count; i++ )
+                for (int i = 0; i < this.Controls.Count; i++)
                 {
                     if (this.Controls[i].GetType() == typeof(MAIF.classes.ControllsClasses.DropDown) || this.Controls[i].GetType() == typeof(MAIF.classes.ControllsClasses.TextBox))
-                    {
                         this.Controls[i].Width = this.Controls[i].Width + ctrlWidthDiff;
-                    }
 
-                    if(this.Controls[i].Name == "units")
-                    {
+                    if (this.Controls[i].Name == "units")
                         this.Controls[i].Left = this.Controls[i].Left + ctrlWidthDiff;
                     }
                 }
             }
+
+        protected void setColumnedWidth(int value)
+        {
+            this.Width = value;
         }
+
         private int multiplier = 6;
 
         public GroupBox asControl() 
@@ -59,6 +69,19 @@ namespace MAIF.ControllsClasses
         }
 
         public ControlGroup(Group currentGroup)
+        {
+            if (currentGroup.H1 == null)
+                this.createSimpleGroup(currentGroup);
+            else
+                this.createColumnedGroup(currentGroup);
+        }
+
+        void ControlGroup_TextChanged(object sender, EventArgs e)
+        {
+            ((MAIF.classes.ControllsClasses.TextBox)sender).CurrentParam.Value = ((MAIF.classes.ControllsClasses.TextBox)sender).Text;
+        }
+
+        protected void createSimpleGroup(Group currentGroup)
         {
             this.currentGroup = currentGroup;
 
@@ -144,9 +167,9 @@ namespace MAIF.ControllsClasses
             this.Height = currentYPosition + 10;
         }
 
-        void ControlGroup_TextChanged(object sender, EventArgs e)
+        protected void createColumnedGroup(Group currentGroup)
         {
-            ((MAIF.classes.ControllsClasses.TextBox)sender).CurrentParam.Value = ((MAIF.classes.ControllsClasses.TextBox)sender).Text;
+            
         }
 
         void ControlGroup_SelectedIndexChanged(object sender, EventArgs e)
@@ -172,13 +195,13 @@ namespace MAIF.ControllsClasses
             }
 
             ((MAIF.classes.ControllsClasses.DropDown)sender).CurrentParam.Value = ((MAIF.classes.ControllsClasses.DropDown)sender).SelectedItem.ToString();
-
         }
 
+        
         public bool IsValid()
         {
             bool isValid = true;
-            for(int i = 0; i<this.Controls.Count; i++)
+            for (int i = 0; i < this.Controls.Count; i++)
             {
                 if (this.Controls[i].GetType() == typeof(MAIF.classes.ControllsClasses.TextBox) || this.Controls[i].GetType() == typeof(MAIF.classes.ControllsClasses.DropDown))
                 {
@@ -194,8 +217,12 @@ namespace MAIF.ControllsClasses
                     }
                 }
             }
-
+#if DEBUG
+            return true;
+#else
             return isValid;
+#endif
         }
+
     }
 }
