@@ -16,7 +16,14 @@ namespace MAIF.classes.ControllsClasses
             if (this.CurrentParam.Value == "%current_date%") this.Text = DateTime.Now.ToShortDateString();
             if (!String.IsNullOrWhiteSpace(this.CurrentParam.Value))
                 if (this.CurrentParam.Value.IndexOfAny(new char[] { '%', '!', '=' }) < 0)
-                    this.Text = this.CurrentParam.Value;
+                {
+                    var x = this.CurrentParam.Value.ToString();
+                    if (this.CurrentParam.Units == "%")
+                    {
+                        x = ((Int32)(Double.Parse(this.CurrentParam.Value) * 100)).ToString();
+                    }
+                    this.Text = x;
+                }
         }
         public Control AsControl()
         {

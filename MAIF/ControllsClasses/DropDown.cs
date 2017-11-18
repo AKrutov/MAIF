@@ -28,7 +28,12 @@ namespace MAIF.classes.ControllsClasses
 	        }
 
             if(param.Value != null){
-                int index = this.FindStringExact(param.Value.ToString());
+                var x = param.Value.ToString();
+                if (param.Units == "%")
+                {
+                    x = ((Int32)(Utilities.AccurateParse(param.Value) * 100)).ToString();
+                }
+                int index = this.FindStringExact(x);
                 this.SelectedItem = this.Items[index];
             }   
             

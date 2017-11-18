@@ -78,11 +78,12 @@ namespace MAIF
 
         }
 
-        public static string FillTemplateHtml(Dictionary<string, string> values)
+       
+        public static string FillTemplateHtml(Dictionary<string, string> values,string templateName)
         {
-            string templateFileHtml = "Resources\\template2.htm";
+            string templateFileHtml = "Resources\\"+ templateName;
             string newName = System.IO.Path.GetRandomFileName() + ".htm";
-            newName = templateFileHtml.Replace("template2.htm", newName).Replace("Resources\\","");
+            newName = templateFileHtml.Replace(templateName, newName).Replace("Resources\\","");
 
             File.Copy(templateFileHtml, newName);
 
@@ -95,7 +96,27 @@ namespace MAIF
 
                 foreach (var v in values)
                 {
-                    content = content.Replace("%%" + v.Key + "%%", v.Value);
+                    //content = content.Replace("%%" + v.Key + "%%", v.Value);
+
+                    if (!String.IsNullOrWhiteSpace(v.Value))
+                    {
+                        if (v.Value.IndexOf(';') < 0)
+                            content = content.Replace("%" + v.Key + "%", v.Value);
+                        else
+                        {
+                            var a =  v.Value.Split(new[] { ';' });
+                            for (int iterator = 0; iterator < a.Count(); iterator++)
+                            {
+                                content = content.Replace("%" + v.Key + "[" + iterator + "]%", a[iterator]);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        content = content.Replace("%" + v.Key + "%", "0");
+                    }
+
+
                 }
                 sw.Write(content);
                 sw.Close();

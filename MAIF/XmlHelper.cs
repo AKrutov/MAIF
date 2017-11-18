@@ -33,6 +33,8 @@ namespace MAIF
         public string IsRequired { get; set; }
         [XmlAttribute(AttributeName = "scope")]
         public string Scope { get; set; }
+        [XmlAttribute(AttributeName = "is_numeric")]
+        public string IsNumeric { get; set; }
     }
 
     [Serializable]
