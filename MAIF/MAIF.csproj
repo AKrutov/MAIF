@@ -90,6 +90,9 @@
     <Compile Include="ControllsClasses\DropDown.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ControllsClasses\FileSelectionControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ControllsClasses\MultipleDropBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -177,18 +180,80 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Images\1-active.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\1-disabled.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\10-active.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\10-disabled.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\10.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\11-active.png" />
+    <Content Include="Images\11-disabled.png" />
+    <Content Include="Images\11.png" />
+    <Content Include="Images\12-active.png" />
+    <Content Include="Images\12-disabled.png" />
+    <Content Include="Images\12.png" />
+    <Content Include="Images\2-active.png" />
+    <Content Include="Images\2-disabled.png" />
+    <Content Include="Images\2.png" />
+    <Content Include="Images\3-active.png" />
+    <Content Include="Images\3-disabled.png" />
+    <Content Include="Images\3.png" />
+    <Content Include="Images\4-active.png" />
+    <Content Include="Images\4-disabled.png" />
+    <Content Include="Images\4.png" />
+    <Content Include="Images\5-active.png" />
+    <Content Include="Images\5-disabled.png" />
+    <Content Include="Images\5.png" />
+    <Content Include="Images\6-active.png" />
+    <Content Include="Images\6-disabled.png" />
+    <Content Include="Images\6.png" />
+    <Content Include="Images\7-active.png" />
+    <Content Include="Images\7-disabled.png" />
+    <Content Include="Images\7.png" />
+    <Content Include="Images\8-active.png" />
+    <Content Include="Images\8-disabled.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\8.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\9-active.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\9-disabled.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\9.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\house-1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Libs\DocumentFormat.OpenXml.dll" />
     <Content Include="params.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
-    <None Include="Resources\template1.html">
+    <Content Include="Resources\template1.htm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
     <None Include="Resources\template2.htm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

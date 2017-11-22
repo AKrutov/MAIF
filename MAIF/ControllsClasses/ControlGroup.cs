@@ -64,6 +64,13 @@ namespace MAIF.ControllsClasses
 
         void ControlGroup_TextChanged(object sender, EventArgs e)
         {
+            if(((MAIF.classes.ControllsClasses.TextBox)sender).CurrentParam.Units == "%")
+            {
+                var n = Utilities.AccurateParse(((MAIF.classes.ControllsClasses.TextBox)sender).Text);
+                n = n / 100;
+                ((MAIF.classes.ControllsClasses.TextBox)sender).CurrentParam.Value = n.ToString();
+            }
+            else
             ((MAIF.classes.ControllsClasses.TextBox)sender).CurrentParam.Value = ((MAIF.classes.ControllsClasses.TextBox)sender).Text;
         }
 
@@ -123,14 +130,13 @@ namespace MAIF.ControllsClasses
                 foreach (Control ct in this.Controls)
                     ct.Font = new Font(DefaultFont.FontFamily, DefaultFont.Size, FontStyle.Regular);
 
-                //if (this.currentGroup.Params[i].IsHidden == "1")
-                //{
-                    //caption.Hide();
-                    //ctrl.Hide();
-
-                //}
-                //else
-                //{
+                if (this.currentGroup.Params[i].IsHidden == "1")
+                {
+                    caption.Hide();
+                    ctrl.Hide();
+                }
+                else
+                {
                     if (this.currentGroup.Params[i].Units != null)
                     {
                         Label units = new Label();
@@ -142,10 +148,10 @@ namespace MAIF.ControllsClasses
                         this.Controls.Add(units);
                     }
 
-                ctrl.Enabled = (this.currentGroup.Params[i].IsHidden != "1");
+                    //ctrl.Enabled = (this.currentGroup.Params[i].IsHidden != "1");
 
                     currentYPosition = currentYPosition + 22;
-                //}
+                }
             }
             this.Height = currentYPosition + 10;
         }
@@ -215,7 +221,7 @@ namespace MAIF.ControllsClasses
                 caption.Top = currentYPosition;
                 caption.Text = currentParam.Desc;
                 caption.Width = curLabelWidth;
-               // if(currentParam.IsHidden != "1")
+                if(currentParam.IsHidden != "1")
                     this.Controls.Add(caption);
 
                 IAbstractControll _ctrl = new ControllFactory().CreateControl(this.currentGroup.Params[i], columns);
@@ -228,11 +234,12 @@ namespace MAIF.ControllsClasses
                 else
                     ctrlWidth = (ctrlWidth < ctrl.Width) ? ctrl.Width : ctrlWidth;
 
-                
-                if (currentParam.IsHidden == "1")
-                    ctrl.Enabled = false;
-                //else
+
+                if (currentParam.IsHidden != "1")
                     currentYPosition = currentYPosition + curRowHeight;
+                else
+                    ctrl.Hide();
+               
 
                 this.Controls.Add(ctrl);
             }
@@ -290,7 +297,14 @@ namespace MAIF.ControllsClasses
                 }
             }
 
-            ((MAIF.classes.ControllsClasses.DropDown)sender).CurrentParam.Value = ((MAIF.classes.ControllsClasses.DropDown)sender).SelectedItem.ToString();
+            if (((MAIF.classes.ControllsClasses.DropDown)sender).CurrentParam.Units == "%")
+            {
+                var n = Utilities.AccurateParse(((MAIF.classes.ControllsClasses.DropDown)sender).SelectedItem.ToString());
+                n = n / 100;
+                ((MAIF.classes.ControllsClasses.DropDown)sender).CurrentParam.Value = n.ToString();
+            }
+            else
+                ((MAIF.classes.ControllsClasses.DropDown)sender).CurrentParam.Value = ((MAIF.classes.ControllsClasses.DropDown)sender).SelectedItem.ToString();
         }
 
         public bool IsValid()
@@ -298,21 +312,22 @@ namespace MAIF.ControllsClasses
             bool isValid = true;
             for (int i = 0; i < this.Controls.Count; i++)
             {
-                if (this.Controls[i].GetType() == typeof(MAIF.classes.ControllsClasses.TextBox) 
+                if (this.Controls[i].GetType() == typeof(MAIF.classes.ControllsClasses.TextBox)
                     || this.Controls[i].GetType() == typeof(MAIF.classes.ControllsClasses.DropDown)
                     || this.Controls[i].GetType() == typeof(MAIF.ControllsClasses.MultipleTextBox)
                     )
                 {
-                    if (((IAbstractControll)this.Controls[i]).Validate())
-                    {
-                        isValid = isValid && true;
-                        ((Label)this.Controls[i - 1]).ForeColor = Color.Black;
-                    }
-                    else
-                    {
-                        isValid = isValid && false;
-                        ((Label)this.Controls[i - 1]).ForeColor = Color.Red;
-                    }
+                    if (((IAbstractControll)this.Controls[i]).CurrentParam.IsHidden != "1")
+                        if (((IAbstractControll)this.Controls[i]).Validate())
+                        {
+                            isValid = isValid && true;
+                            ((Label)this.Controls[i - 1]).ForeColor = Color.Black;
+                        }
+                        else
+                        {
+                            isValid = isValid && false;
+                            ((Label)this.Controls[i - 1]).ForeColor = Color.Red;
+                        }
 
                 }
             }

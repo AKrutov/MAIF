@@ -30,16 +30,18 @@ namespace MAIF
                 newValues.Add(v.Key, newValue);
             }
 
-            int counter = 0;
-            //Вот отсюда переписать
+            int counter = 0;            
             while ((CheckIfNonCalculatedFormulaExists(resultValues)||resultValues.Count==0)&&counter<counterMax)
             {
                 foreach (var v in newValues)
                 {
                     if (!resultValues.ContainsKey(v.Key))
                         resultValues.Add(v.Key, v.Value);
-                    if (resultValues[v.Key].IndexOf("f(") >= 0)
-                        resultValues[v.Key] = UpdateFormulaVals(resultValues, resultValues[v.Key]);
+                    if (resultValues[v.Key] != null)
+                    {
+                        if (resultValues[v.Key].IndexOf("f(") >= 0)
+                            resultValues[v.Key] = UpdateFormulaVals(resultValues, resultValues[v.Key]);
+                    }
                 }
 
                 counter++;
@@ -139,7 +141,8 @@ namespace MAIF
         {
             foreach (var v in values)
             {
-                if (v.Value.IndexOf("f(") >= 0 && v.Value.IndexOf("%") >= 0) return true;
+                if(v.Value!=null)
+                    if (v.Value.IndexOf("f(") >= 0 && v.Value.IndexOf("%") >= 0) return true;
             }
             return false;
         }
@@ -149,25 +152,28 @@ namespace MAIF
             foreach (var v in values)
             {
                 String result = "";
-                if (v.Value.IndexOf(';')>=0)
+                if (v.Value != null)
                 {
-                    var array = v.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-                    List<String> results = new List<String>();
-                    foreach(var a in array)
+                    if (v.Value.IndexOf(';') >= 0)
                     {
-                        if (!String.IsNullOrWhiteSpace(a))
-                            results.Add(EvalCustom(a));
-                        else
-                            results.Add(String.Empty);
+                        var array = v.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                        List<String> results = new List<String>();
+                        foreach (var a in array)
+                        {
+                            if (!String.IsNullOrWhiteSpace(a))
+                                results.Add(EvalCustom(a));
+                            else
+                                results.Add(String.Empty);
+                        }
+                        result = String.Join(";", results);
                     }
-                    result = String.Join(";", results);
-                }
-                else
-                {
-                    if (!String.IsNullOrWhiteSpace(v.Value))
-                        result = EvalCustom(v.Value);
                     else
-                        result = String.Empty;
+                    {
+                        if (!String.IsNullOrWhiteSpace(v.Value))
+                            result = EvalCustom(v.Value);
+                        else
+                            result = String.Empty;
+                    }
                 }
                 //String newValue = v.Value;
                 //if (v.Value.IndexOf("f(") >= 0)

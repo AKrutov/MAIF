@@ -7,8 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 
-
-
 namespace MAIF
 {
     class Utilities
@@ -23,10 +21,7 @@ namespace MAIF
                 {
                     expression = ConvertPow(expression);
                 }
-                while (expression.IndexOf("Math.Discont") >= 0)
-                {
-                    expression = ConvertDiscont(expression);
-                }
+
                 var loDataTable = new DataTable();
                 var loDataColumn = new DataColumn("Eval", typeof(double), expression);
                 loDataTable.Columns.Add(loDataColumn);
@@ -44,7 +39,7 @@ namespace MAIF
             return 0;
         }
 
-        public static int GetFormulaLen(string expression)
+        public static int PowFormulaLen(string expression)
         {
             var countOpen = 0;
             var countClose = 0;
@@ -66,7 +61,7 @@ namespace MAIF
             expression = expression.Substring(8);
             //expression = expression.Replace("Math.Pow", "");
 
-            var len = GetFormulaLen(expression);
+            var len = PowFormulaLen(expression);
             if (len >= 0)
             {
                 end = expression.Substring(len);
@@ -74,11 +69,12 @@ namespace MAIF
             expression = expression.Substring(0, len);
             while (expression.Trim().EndsWith(")") && expression.Trim().StartsWith("(")) expression = expression.Substring(1, expression.Length - 2);
 
+
             var a = expression.Split(new char[] { ',' });
 
-            var n = Math.Round(Decimal.Parse(a[1].Replace(".", ",")));
+            var exp = Evaluate(AccurateParse(a[1]).ToString());
+            var n = Math.Round(exp);
 
-            //calc transform
             String result = "";
             for (int i = 0; i < n; i++)
             {
@@ -89,43 +85,6 @@ namespace MAIF
             return start + result + end;
         }
 
-        public static string CalculateDiscont(int years, decimal val)
-        {
-            decimal result = 0;
-            for (int i = 1; i <= years; i++)
-            {
-                decimal tmp = (decimal)(1 / (Math.Pow((1 + (double)val), (double)i)));
-                result += tmp;
-            }
-            return Math.Round(result, 2).ToString().Replace(",",".");
-        }
-        public static string ConvertDiscont(string expression)
-        {
-            //expression = "(1/Math.Pow((1+0.08),30))";
-            var start = expression.Substring(0, expression.IndexOf("Math.Discont("));
-            var end = String.Empty;
-            expression = expression.Substring(expression.IndexOf("Math.Discont("));
-            expression = expression.Substring(12);
-            //expression = expression.Replace("Math.Pow", "");
-
-            var len = GetFormulaLen(expression);
-            if (len >= 0)
-            {
-                end = expression.Substring(len);
-            }
-            expression = expression.Substring(0, len);
-            while (expression.Trim().EndsWith(")") && expression.Trim().StartsWith("(")) expression = expression.Substring(1, expression.Length - 2);
-
-            var a = expression.Split(new char[] { ',' });
-
-            var n = Math.Round(Decimal.Parse(a[1].Replace(".", ",")));
-
-            String result = "";
-            result = CalculateDiscont((int)n, (decimal)(Evaluate(a[0]))).ToString();
-
-            return start + result + end;
-        }
-             
         public static Double AccurateParse(string value)
         {
             Double result = 0;
@@ -221,3 +180,6 @@ namespace MAIF
         }
     }
 }
+
+
+

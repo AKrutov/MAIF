@@ -1,4 +1,4 @@
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <ArrayOfGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Group id="1" desc="Исходные данные для расчета">
     <Param name="common_address" desc="Адрес дома" tooltip="Адрес, по которому дом будет расположен" allow_edit="1"/>

@@ -17,14 +17,14 @@ namespace MAIF
 {
     public partial class MainForm : Form
     {
-        XmlRootAttribute xRoot = new XmlRootAttribute();
-        
+        public String currentXmlPath;
+       
         public MainForm()
         {
             InitializeComponent();
             StartPosition = FormStartPosition.CenterScreen;
-            xRoot.ElementName = "ArrayOfGroup";
-            xRoot.IsNullable = true;
+
+            currentXmlPath = "params.xml";
 
             var x = Utilities.ConvertPow("Math.Pow(1,1)");
         }
@@ -56,11 +56,12 @@ namespace MAIF
             {
                 try
                 {
+                    currentXmlPath = theDialog.FileName;
                     if ((myStream = theDialog.OpenFile()) != null)
                     {
                         using (StreamReader reader = new StreamReader(myStream))
                         {
-                            var groups = (List<Group>)(new XmlSerializer(typeof(List<Group>), xRoot)).Deserialize(reader);
+                            var groups = (List<Group>)(new XmlSerializer(typeof(List<Group>), Utilities.xRoot)).Deserialize(reader);
 
                             CalcForm t = new CalcForm(groups);
                             t.Show(this);
@@ -75,31 +76,34 @@ namespace MAIF
         }
 
         private void toolStripButton3_Click(object sender, EventArgs e)
-        {           
-
-            var paramsPath = "params.xml";
+        {
             string path = Directory.GetCurrentDirectory();
 
-            var myFile = new DirectoryInfo(path).GetFiles().Where(x=>x.Name.IndexOf("params_")>=0)
+            var myFile = new DirectoryInfo(path).GetFiles().Where(x => x.Name.IndexOf("params_") >= 0)
              .OrderByDescending(f => f.LastWriteTime)
              .FirstOrDefault();
 
             if (myFile != null)
-                paramsPath = myFile.Name; 
+                currentXmlPath = myFile.Name;
 
-            using (StreamReader reader = new StreamReader(paramsPath))
+            var groups = Utilities.GetParamsFromXML(currentXmlPath);
+            if (groups.Count() > 0)
             {
-                var groups = (List<Group>)(new XmlSerializer(typeof(List<Group>), xRoot)).Deserialize(reader);
-
                 CalcForm t = new CalcForm(groups);
                 t.Show(this);
             }
+
         }
 
         private void toolStripButton4_Click(object sender, EventArgs e)
         {
             HistoryForm t = new HistoryForm();
             t.Show(this);
+        }
+
+        private void toolStripStatusLabel3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
