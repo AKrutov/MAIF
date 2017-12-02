@@ -152,6 +152,10 @@ namespace MAIF.ControllsClasses
 
                     currentYPosition = currentYPosition + 22;
                 }
+                if(this.currentGroup.Params[i].Allow_edit=="0")
+                {
+                    ctrl.Enabled = false;
+                }
             }
             this.Height = currentYPosition + 10;
         }

@@ -132,6 +132,7 @@
     <Compile Include="ResultForm.Designer.cs">
       <DependentUpon>ResultForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="RevitImport.cs" />
     <Compile Include="SettingsHelper.cs" />
     <Compile Include="TextInputForm.cs">
       <SubType>Form</SubType>
@@ -180,6 +181,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="e_params_DON.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\1-active.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -246,7 +250,19 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="params_clean.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\template1.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\template3.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\template4.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\XMLFile1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\template2.htm">

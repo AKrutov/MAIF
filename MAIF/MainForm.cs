@@ -18,6 +18,7 @@ namespace MAIF
     public partial class MainForm : Form
     {
         public String currentXmlPath;
+        private List<RevitValue> revits;
        
         public MainForm()
         {
@@ -26,7 +27,9 @@ namespace MAIF
 
             currentXmlPath = "params.xml";
 
-            var x = Utilities.ConvertPow("Math.Pow(1,1)");
+            
+            //var x = Utilities.ConvertPow("Math.Pow(1,1)");            
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -41,8 +44,26 @@ namespace MAIF
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
-            ImportForm t = new ImportForm();
-            t.Show(this);
+            Stream myStream = null;
+            OpenFileDialog theDialog = new OpenFileDialog();
+            theDialog.Title = "Open import file";
+            theDialog.Filter = "XML files|*.xml";
+            theDialog.InitialDirectory = Directory.GetCurrentDirectory();
+            if (theDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    currentXmlPath = theDialog.FileName;
+                    if ((myStream = theDialog.OpenFile()) != null)
+                    {
+                        revits = RevitImport.GetValuesFromXml(currentXmlPath);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
+                }
+            }
         }
 
         private void toolStripButton2_Click(object sender, EventArgs e)
@@ -63,6 +84,7 @@ namespace MAIF
                         {
                             var groups = (List<Group>)(new XmlSerializer(typeof(List<Group>), Utilities.xRoot)).Deserialize(reader);
 
+                            RevitImport.MapParamsFromRevit(revits, groups);
                             CalcForm t = new CalcForm(groups);
                             t.Show(this);
                         }
@@ -89,6 +111,8 @@ namespace MAIF
             var groups = Utilities.GetParamsFromXML(currentXmlPath);
             if (groups.Count() > 0)
             {
+
+                RevitImport.MapParamsFromRevit(revits, groups);
                 CalcForm t = new CalcForm(groups);
                 t.Show(this);
             }
