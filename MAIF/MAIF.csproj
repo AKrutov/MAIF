@@ -103,6 +103,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="CustomMenuRenderer.cs" />
+    <Compile Include="EnergyClass.cs" />
     <Compile Include="ExportHelper.cs" />
     <Compile Include="HistoryForm.cs">
       <SubType>Form</SubType>
@@ -183,6 +184,7 @@
   <ItemGroup>
     <Content Include="e_params_DON.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Images\1-active.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
