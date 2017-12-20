@@ -13,8 +13,7 @@ namespace MAIF
 {
     public partial class ResultForm : Form
     {
-        String currentTemplateName = "template2.htm";
-        //String fileName;
+        String currentTemplateName = (Program.IsEnergy) ? "template3.htm" : "template2.htm";
         Dictionary<string, string> values;
         List<Group> initialGroups;
         String htmlTemplateName;
@@ -22,19 +21,26 @@ namespace MAIF
         public ResultForm(List<Group> groups, List<Param> paramList)
         {
             InitializeComponent();
+           // if(Program.IsEnergy)
 
             initialGroups = groups;
             values = Utilities.ConvertParamsToValues(paramList);
             values = SettingsHelper.ProcessValues(values);
+
+            if(Program.IsEnergy)
+            {
+                if(values.ContainsKey("common_energy_class")&& values.ContainsKey("common_energy_base_r"))
+                    values["common_energy_class"] = EnergyClass.GetEnergyClass(Double.Parse(values["common_energy_base_r"]));
+                if (values.ContainsKey("e_picture2") && values.ContainsKey("common_energy_class"))
+                    values["e_picture2"] = "Images\\"+ values["common_energy_class"].ToLower() + ".png";
+                if (values.ContainsKey("e_picture1") && values.ContainsKey("common_energy_class"))
+                    values["e_picture1"] = "Images\\e_class.png";
+            }
         }
 
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
-            //string name = ExportHelper.FillTemplateDocx(values);
-
             string path = Directory.GetCurrentDirectory();
-            //string name = ExportHelper.FillTemplateDocx(values);
-            //// var result = ExportHelper.PdfSharpConvert(name);
             String docxFileTmpName = path + "\\" + htmlTemplateName.Replace(".htm", ".docx");
             ExportHelper.ConvertHtml2Docx(path + "\\" + htmlTemplateName, docxFileTmpName);
 
@@ -85,8 +91,6 @@ namespace MAIF
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
             string path = Directory.GetCurrentDirectory();
-            //string name = ExportHelper.FillTemplateDocx(values);
-            // var result = ExportHelper.PdfSharpConvert(name);
             String pdfFileTmpName = path + "\\" + htmlTemplateName.Replace(".htm", ".pdf");
             ExportHelper.ConvertWord2PDF(path + "\\" + htmlTemplateName, pdfFileTmpName);
 
@@ -125,7 +129,18 @@ namespace MAIF
             if (currentTemplateName == "template1.htm")
                 currentTemplateName = "template2.htm";
             else
-                currentTemplateName = "template1.htm";
+            {
+                if (currentTemplateName == "template2.htm")
+                    currentTemplateName = "template1.htm";
+                else
+                {
+                    if (currentTemplateName == "template3.htm")
+                        currentTemplateName = "template4.htm";
+                    else
+                        if (currentTemplateName == "template4.htm")
+                            currentTemplateName = "template3.htm";
+                }
+            }
 
             string curDir = Directory.GetCurrentDirectory();
             htmlTemplateName = ExportHelper.FillTemplateHtml(values, currentTemplateName);
@@ -167,7 +182,7 @@ namespace MAIF
                         initialGroups[0].Params.FirstOrDefault(x => x.Name == "building_picture").Value = newFilePath;
                     }
                     else
-                        initialGroups[0].Params.Add(new Param() { IsHidden = "1", Name = "building_picture", Value = newFilePath, Desc="Фото объекта" });
+                        initialGroups[0].Params.Add(new Param() { IsHidden = "1", Name = "building_picture", Value = newFilePath, Desc = "Фото объекта" });
                 }
 
                 System.Windows.Forms.Form f = System.Windows.Forms.Application.OpenForms["MainForm"];
@@ -179,5 +194,35 @@ namespace MAIF
 
             }
         }
+
+        private void toolStripButton6_Click(object sender, EventArgs e)
+        {
+
+            string path = Directory.GetCurrentDirectory();
+            Stream myStream;
+
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.Filter = "XML files (*.xml) | *.XML; *.xml; | All files(*.*) | *.*";
+            saveFileDialog1.FilterIndex = 1;
+            saveFileDialog1.RestoreDirectory = true;
+            saveFileDialog1.Title = "Save PDF Files";
+            saveFileDialog1.CheckFileExists = false;
+            saveFileDialog1.CheckPathExists = true;
+            saveFileDialog1.DefaultExt = "pdf";
+            saveFileDialog1.OverwritePrompt = true;
+            saveFileDialog1.RestoreDirectory = true;
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                if ((myStream = saveFileDialog1.OpenFile()) != null)
+                {
+                    myStream.Close();                 
+                    Utilities.SaveParamsToXML(initialGroups, saveFileDialog1.FileName, true);
+                }
+            }
+
+        }
     }
 }
+

@@ -34,7 +34,8 @@ namespace MAIF.classes.ControllsClasses
                     x = ((Int32)(Utilities.AccurateParse(param.Value) * 100)).ToString();
                 }
                 int index = this.FindStringExact(x);
-                this.SelectedItem = this.Items[index];
+                if (index == -1) { this.Items.Add(x); index = this.FindStringExact(x); }
+                    this.SelectedItem = this.Items[index];
             }   
             
         }

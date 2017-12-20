@@ -83,7 +83,6 @@ namespace MAIF
 
         public static string UpdateFormulaVals(Dictionary<string, string> values, string formula)
         {
-           
             foreach (var v in values)
             {
                 //formula = v.Value;
@@ -94,8 +93,6 @@ namespace MAIF
                     //var value = Decimal.Parse(v.Value, numberFormatInfo);
 
                     formula = formula.Replace("%" + v.Key + "%", v.Value.Replace(",", "."));
-
-
                 }
                 if (formula.IndexOf("%" + v.Key + "[") >= 0 && v.Value.IndexOf("f(") < 0)
                 {

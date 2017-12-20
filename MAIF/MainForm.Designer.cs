@@ -193,7 +193,9 @@
             // 
             // toolStripContainer3.ContentPanel
             // 
+            this.toolStripContainer3.ContentPanel.BackColor = System.Drawing.Color.White;
             this.toolStripContainer3.ContentPanel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("toolStripContainer3.ContentPanel.BackgroundImage")));
+            this.toolStripContainer3.ContentPanel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.toolStripContainer3.ContentPanel.Controls.Add(this.statusStrip2);
             this.toolStripContainer3.ContentPanel.Size = new System.Drawing.Size(984, 474);
             this.toolStripContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -225,7 +227,7 @@
             // statusLabel
             // 
             this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(0, 17);
+            this.statusLabel.Size = new System.Drawing.Size(0, 19);
             // 
             // toolStripStatusLabel3
             // 
@@ -243,12 +245,15 @@
             this.Controls.Add(this.toolStripContainer1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Программа расчета";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MainForm_KeyPress);
             this.toolStripContainer1.ResumeLayout(false);
             this.toolStripContainer1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);

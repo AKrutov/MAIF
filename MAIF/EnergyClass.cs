@@ -7,7 +7,7 @@ namespace MAIF
 {
     public static class EnergyClass
     {
-        public static double GetBaseLevel(int floors, int lifts, int degrees, bool heatingOnly = false)
+        public static String GetBaseLevel(int floors, int lifts, int degrees, bool heatingOnly = false)
         {
             double value = 0;
 
@@ -93,7 +93,7 @@ namespace MAIF
 
             if (lifts == 0) value -= 3;
 
-            return value;
+            return value.ToString();
         }
 
         public static string GetEnergyClass(double value)

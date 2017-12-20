@@ -14,69 +14,69 @@ namespace MAIF
 {
     class ExportHelper
     {
-        public static String Generate()
-        {
-            string templateFile = "template.docx";
+//        public static String Generate()
+//        {
+//            string templateFile = "template.docx";
 
-            string newName = System.IO.Path.GetRandomFileName() + ".docx";
-            newName = templateFile.Replace("template.docx", newName);
+//            string newName = System.IO.Path.GetRandomFileName() + ".docx";
+//            newName = templateFile.Replace("template.docx", newName);
 
-            File.Copy(templateFile, newName);
-            //основной док-т
-            DocumentFormat.OpenXml.Packaging.WordprocessingDocument docx = DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open(newName, true);
+//            File.Copy(templateFile, newName);
+//            //основной док-т
+//            DocumentFormat.OpenXml.Packaging.WordprocessingDocument docx = DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open(newName, true);
 
-            string docText = null;
-            using (System.IO.StreamReader sr = new System.IO.StreamReader(docx.MainDocumentPart.GetStream()))
-            {
-                docText = sr.ReadToEnd();
-                sr.Close();
-            }
+//            string docText = null;
+//            using (System.IO.StreamReader sr = new System.IO.StreamReader(docx.MainDocumentPart.GetStream()))
+//            {
+//                docText = sr.ReadToEnd();
+//                sr.Close();
+//            }
 
-            //табличный док-т
-            DocumentFormat.OpenXml.Packaging.WordprocessingDocument docx_table = DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open("template_table.docx", true);
+//            //табличный док-т
+//            DocumentFormat.OpenXml.Packaging.WordprocessingDocument docx_table = DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open("template_table.docx", true);
 
-            string docText_table = null;
-            string docText_table_all = null;
-            using (System.IO.StreamReader sr = new System.IO.StreamReader(docx_table.MainDocumentPart.GetStream()))
-            {
-                docText_table = sr.ReadToEnd();
-                sr.Close();
-            }
+//            string docText_table = null;
+//            string docText_table_all = null;
+//            using (System.IO.StreamReader sr = new System.IO.StreamReader(docx_table.MainDocumentPart.GetStream()))
+//            {
+//                docText_table = sr.ReadToEnd();
+//                sr.Close();
+//            }
 
-            docText_table = docText_table.Substring(docText_table.IndexOf("<w:tbl>"));
-            docText_table = docText_table.Substring(0, docText_table.IndexOf("</w:tbl>") + 8);
+//            docText_table = docText_table.Substring(docText_table.IndexOf("<w:tbl>"));
+//            docText_table = docText_table.Substring(0, docText_table.IndexOf("</w:tbl>") + 8);
 
-            for (int j = 1; j < 3; j++)
-            {
-                for (int i = 1; i < 3; i++)
-                {
-                    docText_table = docText_table.Replace("%%bla-bla" + i + "%%", "пыщпыщ" + i);
-                }
-                //-------------------------------------------------------------------------------------------------------------------------------------------------------------
+//            for (int j = 1; j < 3; j++)
+//            {
+//                for (int i = 1; i < 3; i++)
+//                {
+//                    docText_table = docText_table.Replace("%%bla-bla" + i + "%%", "пыщпыщ" + i);
+//                }
+//                //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-                docText_table_all += @"<w:p>
-                                        <w:pPr>
-                                        <w:rPr>
-                                        <w:lang w:val='en-US' /> 
-                                        </w:rPr>
-                                        </w:pPr>
-                                        </w:p>"
-                                        + docText_table;
-            }
-            docText = docText.Replace("##table##", docText_table_all);
+//                docText_table_all += @"<w:p>
+//                                        <w:pPr>
+//                                        <w:rPr>
+//                                        <w:lang w:val='en-US' /> 
+//                                        </w:rPr>
+//                                        </w:pPr>
+//                                        </w:p>"
+//                                        + docText_table;
+//            }
+//            docText = docText.Replace("##table##", docText_table_all);
 
 
-            using (StreamWriter sw = new StreamWriter(docx.MainDocumentPart.GetStream(FileMode.Create)))
-            {
-                sw.Write(docText);
-                sw.Close();
+//            using (StreamWriter sw = new StreamWriter(docx.MainDocumentPart.GetStream(FileMode.Create)))
+//            {
+//                sw.Write(docText);
+//                sw.Close();
 
-            }
-            docx.Close();
+//            }
+//            docx.Close();
             
-            return newName;
+//            return newName;
 
-        }
+//        }
 
        
         public static string FillTemplateHtml(Dictionary<string, string> values,string templateName)
@@ -129,44 +129,44 @@ namespace MAIF
 
         }
 
-        public static string FillTemplateDocx(Dictionary<string, string> values)
-        {
-            string templateFileHtml = "Resources\\template3.docx";
-            string newName = System.IO.Path.GetRandomFileName() + ".docx";
-            newName = templateFileHtml.Replace("template3.docx", newName).Replace("Resources\\", "");
+        //public static string FillTemplateDocx(Dictionary<string, string> values)
+        //{
+        //    string templateFileHtml = "Resources\\template3.docx";
+        //    string newName = System.IO.Path.GetRandomFileName() + ".docx";
+        //    newName = templateFileHtml.Replace("template3.docx", newName).Replace("Resources\\", "");
 
-            File.Copy(templateFileHtml, newName);
+        //    File.Copy(templateFileHtml, newName);
 
-            if (File.Exists(newName))
-            {
-                //основной док-т
-                DocumentFormat.OpenXml.Packaging.WordprocessingDocument docx = DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open(newName, true);
+        //    if (File.Exists(newName))
+        //    {
+        //        //основной док-т
+        //        DocumentFormat.OpenXml.Packaging.WordprocessingDocument docx = DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open(newName, true);
 
-                string content = null;
-                using (System.IO.StreamReader sr = new System.IO.StreamReader(docx.MainDocumentPart.GetStream()))
-                {
-                    content = sr.ReadToEnd();
-                    sr.Close();
-                }
+        //        string content = null;
+        //        using (System.IO.StreamReader sr = new System.IO.StreamReader(docx.MainDocumentPart.GetStream()))
+        //        {
+        //            content = sr.ReadToEnd();
+        //            sr.Close();
+        //        }
 
-                foreach (var v in values)
-                {
-                    content = content.Replace("%%" + v.Key + "%%", v.Value);
-                }
-                using (StreamWriter sw = new StreamWriter(docx.MainDocumentPart.GetStream(FileMode.Create)))
-                {
-                    sw.Write(content);
-                    sw.Close();
-                }
-                docx.Close();
+        //        foreach (var v in values)
+        //        {
+        //            content = content.Replace("%%" + v.Key + "%%", v.Value);
+        //        }
+        //        using (StreamWriter sw = new StreamWriter(docx.MainDocumentPart.GetStream(FileMode.Create)))
+        //        {
+        //            sw.Write(content);
+        //            sw.Close();
+        //        }
+        //        docx.Close();
 
-                return newName;
-            }
-            else
-            {
-                return String.Empty;
-            }
-        }
+        //        return newName;
+        //    }
+        //    else
+        //    {
+        //        return String.Empty;
+        //    }
+        //}
 
         //public static int PdfSharpConvert(String filename)
         //{

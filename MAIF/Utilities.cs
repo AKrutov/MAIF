@@ -27,6 +27,10 @@ namespace MAIF
                 {
                     expression = ConvertDiscont(expression);
                 }
+                while (expression.IndexOf("Math.GetBaseLevel") >= 0)
+                {
+                    expression = ConvertBaseLevel(expression);
+                }
                 var loDataTable = new DataTable();
                 var loDataColumn = new DataColumn("Eval", typeof(double), expression);
                 loDataTable.Columns.Add(loDataColumn);
@@ -125,7 +129,35 @@ namespace MAIF
 
             return start + result + end;
         }
-             
+
+        public static string ConvertBaseLevel(string expression)
+        {
+            //expression = "(1/Math.Pow((1+0.08),30))";
+            var start = expression.Substring(0, expression.IndexOf("Math.GetBaseLevel("));
+            var end = String.Empty;
+            expression = expression.Substring(expression.IndexOf("Math.GetBaseLevel("));
+            expression = expression.Substring(17);
+
+            var len = GetFormulaLen(expression);
+            if (len >= 0)
+            {
+                end = expression.Substring(len);
+            }
+            expression = expression.Substring(0, len);
+            while (expression.Trim().EndsWith(")") && expression.Trim().StartsWith("(")) expression = expression.Substring(1, expression.Length - 2);
+
+            var a = expression.Split(new char[] { ',' });
+
+            var n1 = Math.Round(Decimal.Parse(a[0].Replace(".", ",")));
+            var n2 = Math.Round(Decimal.Parse(a[1].Replace(".", ",")));
+            var n3 = Math.Round(Decimal.Parse(a[2].Replace(".", ",")));
+
+            String result = "";
+            result = EnergyClass.GetBaseLevel((int)n1,(int)n2,(int)n3);
+
+            return start + result + end;
+        }
+
         public static Double AccurateParse(string value)
         {
             Double result = 0;
@@ -177,16 +209,33 @@ namespace MAIF
             return dict;
         }
 
-        public static string SaveParamsToXML(List<Group> groups, string filename = "")
+        public static string SaveParamsToXML(List<Group> groups, string filename = "", bool removeFormula=false)
         {
+            if(removeFormula)
+            {
+                groups.ForEach(x => x.Params.ForEach(y => y.Formula = ""));
+            }
+
             if (String.IsNullOrWhiteSpace(filename)) filename = @"params_" + DateTime.Now.ToShortDateString() + "_" + DateTime.Now.Ticks.ToString() + ".xml";
             XmlSerializer ser = new XmlSerializer(typeof(List<Group>));
-
             using (FileStream fs = new FileStream(filename, FileMode.Create))
             {
                 ser.Serialize(fs, groups);
             }
             return filename;
+        }
+
+        public static string SaveParamsToXMLWithEncryption(List<Group> groups, string filename = "")
+        {
+            //groups.ForEach(x => x.Params.ForEach(y => y.Value = ""));
+
+            if (String.IsNullOrWhiteSpace(filename)) filename = @"params_" + DateTime.Now.ToShortDateString() + "_" + DateTime.Now.Ticks.ToString() + ".maif";
+            XmlSerializer ser = new XmlSerializer(typeof(List<Group>));
+            using (StringWriter textWriter = new StringWriter())
+            {
+                ser.Serialize(textWriter, groups);
+                return SecurityClass.PutFileData(filename, textWriter.ToString());
+            }
         }
 
         public static List<Group> GetParamsFromXML(string paramsPath)
@@ -202,6 +251,53 @@ namespace MAIF
 
             return groups;
         }
+
+        public static List<Group> GetParamsFromXMLWithEncryption(string paramsPath)
+        {
+        string xml = SecurityClass.GetFileData(paramsPath);                       
+
+            List<Group> groups = new List<Group>();
+
+            string path = Directory.GetCurrentDirectory();
+
+            using (TextReader reader = new StringReader(xml))
+            {
+                groups = (List<Group>)(new XmlSerializer(typeof(List<Group>), xRoot)).Deserialize(reader);
+            }
+
+            return groups;
+    }
+
+        public static List<Group> CombineParamsFromXML(string paramsPath, string cleanParams, bool encrValues = false, bool encrClean = true)
+        {
+            List<Group> groups_clean = new List<Group>();
+            List<Group> groups_values = new List<Group>();
+            Dictionary<string, string> formulas = new Dictionary<string, string>();
+
+            groups_values = encrValues ? GetParamsFromXMLWithEncryption(paramsPath) : GetParamsFromXML(paramsPath);
+            groups_clean = encrClean ? GetParamsFromXMLWithEncryption(cleanParams) : GetParamsFromXML(cleanParams);
+
+            foreach (var r in groups_clean)
+            {
+                foreach (var v in r.Params)
+                {
+                    if (!String.IsNullOrWhiteSpace(v.Formula))
+                    {
+                        formulas.Add(v.Name, v.Formula);
+                    }
+                }
+            }
+
+            foreach (var f in formulas)
+            {
+                var gr = groups_values.FirstOrDefault(x => x.Params.Any(z => z.Desc == f.Key));
+                if (String.IsNullOrWhiteSpace(gr.Params.FirstOrDefault(z => z.Desc == f.Key).Formula))
+                    gr.Params.FirstOrDefault(z => z.Desc == f.Key).Formula = f.Value;
+            }
+
+            return groups_values;
+        }
+        
 
         public static System.Drawing.Image ScaleImage(Image image, int maxWidth, int maxHeight)
         {

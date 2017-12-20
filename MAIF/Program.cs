@@ -7,6 +7,8 @@ namespace MAIF
 {
     static class Program
     {
+        public static bool IsEnergy = true;
+        
         /// <summary>
         /// Главная точка входа для приложения.
         /// </summary>

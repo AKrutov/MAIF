@@ -133,7 +133,7 @@ namespace MAIF
             }
             
             System.Windows.Forms.Form f = System.Windows.Forms.Application.OpenForms["MainForm"];
-            ((MainForm)f).currentXmlPath = Utilities.SaveParamsToXML(this.controllGroups);
+            ((MainForm)f).currentXmlPath = Utilities.SaveParamsToXMLWithEncryption(this.controllGroups);
 
             var resultForm = new ResultForm(this.controllGroups,allParams);
             resultForm.Show();
