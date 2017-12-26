@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Windows.Forms;
 
 namespace MAIF
 {
@@ -110,7 +111,10 @@ namespace MAIF
 
         public static string PutFileData(string path, string data)
         {
-            File.WriteAllText(path,Encrypt(data, _password));
+            if (!string.IsNullOrWhiteSpace(path))
+            {
+                File.WriteAllText(path, Encrypt(data, _password));
+            }
             return path;
         }
     }

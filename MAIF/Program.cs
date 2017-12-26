@@ -7,14 +7,21 @@ namespace MAIF
 {
     static class Program
     {
-        public static bool IsEnergy = true;
+        public static bool IsEnergy = false;
         
         /// <summary>
         /// Главная точка входа для приложения.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
+            if(args.Length>0)
+            {
+                if(args[0].Trim().ToLower()=="energy")
+                {
+                    IsEnergy = true;
+                }
+            }
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());

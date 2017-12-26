@@ -206,10 +206,10 @@ namespace MAIF
             saveFileDialog1.Filter = "XML files (*.xml) | *.XML; *.xml; | All files(*.*) | *.*";
             saveFileDialog1.FilterIndex = 1;
             saveFileDialog1.RestoreDirectory = true;
-            saveFileDialog1.Title = "Save PDF Files";
+            saveFileDialog1.Title = "Save XML Files";
             saveFileDialog1.CheckFileExists = false;
             saveFileDialog1.CheckPathExists = true;
-            saveFileDialog1.DefaultExt = "pdf";
+            saveFileDialog1.DefaultExt = "xml";
             saveFileDialog1.OverwritePrompt = true;
             saveFileDialog1.RestoreDirectory = true;
 

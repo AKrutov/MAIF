@@ -134,12 +134,9 @@ namespace MAIF
             //run 
             string path = Directory.GetCurrentDirectory();
 
-            var myFile = new DirectoryInfo(path).GetFiles().Where(x => x.Name.IndexOf("params_") >= 0)
-             .OrderByDescending(f => f.LastWriteTime)
-             .FirstOrDefault();
-
-            if (myFile != null)
-                currentXmlPath = myFile.Name;
+            var myFile = new DirectoryInfo(path).GetFiles().Where(x => x.Name.IndexOf(((Program.IsEnergy) ? "params_e_" : "params_")) >= 0)
+                          .OrderByDescending(f => f.LastWriteTime)
+                          .FirstOrDefault();
 
             var groups = Utilities.GetParamsFromXMLWithEncryption(currentXmlPath);
             if (groups.Count() > 0)
@@ -148,7 +145,6 @@ namespace MAIF
                 CalcForm t = new CalcForm(groups);
                 t.Show(this);
             }
-
         }
 
         private void toolStripButton4_Click(object sender, EventArgs e)

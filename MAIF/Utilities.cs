@@ -216,7 +216,7 @@ namespace MAIF
                 groups.ForEach(x => x.Params.ForEach(y => y.Formula = ""));
             }
 
-            if (String.IsNullOrWhiteSpace(filename)) filename = @"params_" + DateTime.Now.ToShortDateString() + "_" + DateTime.Now.Ticks.ToString() + ".xml";
+            if (String.IsNullOrWhiteSpace(filename)) filename = ((Program.IsEnergy) ? @"params_e_" : @"params_") + DateTime.Now.ToShortDateString() + "_" + DateTime.Now.Ticks.ToString() + ".xml";
             XmlSerializer ser = new XmlSerializer(typeof(List<Group>));
             using (FileStream fs = new FileStream(filename, FileMode.Create))
             {
@@ -229,7 +229,7 @@ namespace MAIF
         {
             //groups.ForEach(x => x.Params.ForEach(y => y.Value = ""));
 
-            if (String.IsNullOrWhiteSpace(filename)) filename = @"params_" + DateTime.Now.ToShortDateString() + "_" + DateTime.Now.Ticks.ToString() + ".maif";
+            if (String.IsNullOrWhiteSpace(filename)) filename = ((Program.IsEnergy) ? @"params_e_" : @"params_") + DateTime.Now.ToShortDateString() + "_" + DateTime.Now.Ticks.ToString() + ".maif";
             XmlSerializer ser = new XmlSerializer(typeof(List<Group>));
             using (StringWriter textWriter = new StringWriter())
             {
